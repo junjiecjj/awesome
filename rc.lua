@@ -63,8 +63,11 @@ end
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
+beautiful.init(string.format("%s/.config/awesome/themes/%s/theme-personal.lua", os.getenv("HOME"), fence))
+
+
 -- 更改背景图片
-beautiful.get().wallpaper = "/usr/share/awesome/themes/default/background.png"
+beautiful.get().wallpaper = "~/图片/Wallpapers/wallhaven-72rd8e.jpg"
 
 -- 定义终端、默认编辑器
 -- This is used later as the default terminal and editor to run.
