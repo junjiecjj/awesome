@@ -3,6 +3,9 @@
 pcall(require, "luarocks.loader")
 
 
+local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
+local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
+
 --  状态栏插件
 local vicious = require("vicious")
 
@@ -29,7 +32,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
--- Notification library
+-- 通知
 local naughty = require("naughty")
 
 local menubar = require("menubar")
@@ -73,10 +76,10 @@ end
 -- {{{ Variable definitions theme: default  sky  xresources  zenburn
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
-beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
 -- beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), fence))
-
+-- beautiful.init(awful.util.getdir("config") .. "/themes/fency/theme.lua")
 
 -- 更改背景图片
 beautiful.get().wallpaper = "~/图片/Wallpapers/wallhaven-4yr2mx.jpg"
@@ -375,30 +378,112 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
-        buttons = tasklist_buttons
+        buttons = tasklist_buttons,
+
+        style = {
+                	border_width = 3,
+               	border_color = '#000',
+            -- shape = gears.shape.powerline
+            -- shape = gears.shape.rectangular_tag
+            -- shape = gears.shape.hexagon
+            -- shape = gears.shape.rounded_bar
+            -- shape = gears.shape.rounded_rect
+
+        },
+        layout = {
+            spacing = 1,
+            spacing_widget = {
+                {forced_width = 0, widget = wibox.widget.separator},
+                valign = 'right',
+                halign = 'center',
+                widget = wibox.container.place
+            },
+
+            layout = wibox.layout.fixed.horizontal
+        },
+        widget_template = {
+            {
+                {
+                    {
+                        {id = 'icon_role', widget = wibox.widget.imagebox},
+                        margins = 0,
+                        widget = wibox.container.margin
+                    },
+
+                    {id = 'text_role', widget = wibox.widget.textbox},
+                    layout = wibox.layout.fixed.horizontal
+                },
+                left = 20,
+                right = 20,
+                widget = wibox.container.margin
+            },
+            id = 'background_role',
+            forced_width = 200,
+            widget = wibox.container.background
+        }
     }
 
+
+
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({
+        position = "top",
+        screen = s,
+        height = 28,
+        opacity = 1,
+    })
+
+    mysystray = wibox.widget.systray()
 
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
+        align = "centered",
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
             s.mytaglist,
             s.mypromptbox,
         },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
+        -- s.mytasklist, -- Middle widget
+        -- { -- Right widgets
+        --     layout = wibox.layout.fixed.horizontal,
+        --     mykeyboardlayout,
+        --     wibox.widget.systray(),
+        --     mytextclock,
+        --     s.mylayoutbox,
+        -- },
+
+        {
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
-            wibox.widget.systray(),
-            mytextclock,
-            s.mylayoutbox,
+            --   s.mytasklist -- Middle widget
         },
+        { -- Right widgets
+            cpu_widget({
+                    width = 70,
+                    step_width = 2,
+                    step_spacing = 1,
+                    --enable_kill_button=true,
+                    timeout=5
+                    }),
+            spacer,
+            spacer,
+            spacer,
+            mysystray,
+            spacer,
+            spacer,
+            mytextclock,
+            logout_menu_widget(),
+            spacer,
+            spacer,
+            s.mylayoutbox,
+            spacer,
+            layout = wibox.layout.fixed.horizontal
+        }
     }
+
+
+
 end)
 -- }}}
 
@@ -475,7 +560,7 @@ run_once({ "gnome-settings-daemon"  })
 
 
 
--- 方法三：
+-- 方法三： 执行自启动脚本
 -- awful.spawn.with_shell("~/.config/awesome/autostart.sh &")
 
 --============================================================================================================
@@ -996,6 +1081,10 @@ client.connect_signal("manage", function (c)
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
 
+    --圆角
+    c.shape = function(cr,w,h)
+      gears.shape.rounded_rect(cr,w,h,5)
+    end
     if awesome.startup
       and not c.size_hints.user_position
       and not c.size_hints.program_position then
@@ -1004,45 +1093,50 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+
+
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
+    local top_titlebar = awful.titlebar(c, {size = 19,
+  })
     -- buttons for the titlebar
-    local buttons = gears.table.join(
-        awful.button({ }, 1, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.move(c)
-        end),
-        awful.button({ }, 3, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.resize(c)
-        end)
-    )
+    local buttons = gears.table.join(awful.button({}, 1, function()
+        client.focus = c
+        c:raise()
+        awful.mouse.client.move(c)
+    end), awful.button({}, 3, function()
+        client.focus = c
+        c:raise()
+        awful.mouse.client.resize(c)
+    end))
+    top_titlebar:setup{
 
-    awful.titlebar(c) : setup {
         { -- Left
+            spacer,
             awful.titlebar.widget.iconwidget(c),
             buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
+            layout = wibox.layout.fixed.horizontal
         },
         { -- Middle
             { -- Title
-                align  = "center",
+                align = "center",
                 widget = awful.titlebar.widget.titlewidget(c)
             },
             buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
+            layout = wibox.layout.flex.horizontal
         },
         { -- Right
-            awful.titlebar.widget.floatingbutton (c),
+            awful.titlebar.widget.floatingbutton(c),
             awful.titlebar.widget.maximizedbutton(c),
             awful.titlebar.widget.stickybutton   (c),
-            awful.titlebar.widget.ontopbutton    (c),
-            awful.titlebar.widget.closebutton    (c),
+            awful.titlebar.widget.ontopbutton(c),
+            awful.titlebar.widget.closebutton(c),
             layout = wibox.layout.fixed.horizontal()
         },
         layout = wibox.layout.align.horizontal
     }
 end)
+
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
@@ -1078,4 +1172,7 @@ awful.rules.rules = {
    {rule = {class = "Firefox", name = "Download"},
      properties = {floating = true}}
 }
+
+
+
 
