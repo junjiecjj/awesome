@@ -2,9 +2,12 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-
+-- 状态栏插件.
 local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
 local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
+local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
+local net_speed_widget = require("awesome-wm-widgets.net-speed-widget.net-speed")
+local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
 
 --  状态栏插件
 local vicious = require("vicious")
@@ -459,6 +462,7 @@ awful.screen.connect_for_each_screen(function(s)
             --   s.mytasklist -- Middle widget
         },
         { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
             cpu_widget({
                     width = 70,
                     step_width = 2,
@@ -471,6 +475,12 @@ awful.screen.connect_for_each_screen(function(s)
             spacer,
             mysystray,
             spacer,
+            -- battery_widget(),
+            net_speed_widget(),
+            spacer,
+             volume_widget{
+                        widget_type = 'arc'
+                    },
             spacer,
             mytextclock,
             logout_menu_widget(),
@@ -778,22 +788,22 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
               {description = "toggle mute", group = "hotkeys"}),
 
-    -- ALSA volume control
-    awful.key({  }, "XF86AudioRaiseVolume",
-        function ()
-            os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,{description = "volume up", group = "hotkeys"}),
-    awful.key({  }, "XF86AudioLowerVolume",
-        function ()
-            os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,{description = "volume down", group = "hotkeys"}),
-    awful.key({  }, "XF86AudioMute",
-        function ()
-            os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
-            beautiful.volume.update()
-        end,{description = "toggle mute", group = "hotkeys"}),
+    -- -- ALSA volume control
+    -- awful.key({  }, "XF86AudioRaiseVolume",
+    --     function ()
+    --         os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
+    --         beautiful.volume.update()
+    --     end,{description = "volume up", group = "hotkeys"}),
+    -- awful.key({  }, "XF86AudioLowerVolume",
+    --     function ()
+    --         os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
+    --         beautiful.volume.update()
+    --     end,{description = "volume down", group = "hotkeys"}),
+    -- awful.key({  }, "XF86AudioMute",
+    --     function ()
+    --         os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
+    --         beautiful.volume.update()
+    --     end,{description = "toggle mute", group = "hotkeys"}),
 
 
     awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "mpc next" ) end),
