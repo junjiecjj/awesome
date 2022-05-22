@@ -40,7 +40,25 @@ else
 end
 --}}}
 
-theme.font          = "Montecarlo 11"
+-- theme.font          = "Montecarlo 11"
+-- theme.font          = "JetBrainsMono Nerd Font Mono 11"
+-- theme.font          = "JetBrainsMono Nerd Font Mono ExtraLight 11"
+-- theme.font          = "JetBrainsMono Nerd Font Mono Light 11"
+-- theme.font          = "JetBrainsMono Nerd Font Mono Regular 11"
+
+-- theme.font          = "Cascadia Code SemiLight:size=16"
+-- theme.font          = "Cascadia Code ExtraLight:size=16"
+-- theme.font          = "CaskaydiaCove Nerd Font Mono SemiLight 11"
+-- theme.font          = "CaskaydiaCove Nerd Font Mono Light 11"
+-- theme.font          = "CaskaydiaCove Nerd Font Mono Reglar 11"
+-- theme.font          = "CaskaydiaCove Nerd Font Mono Bold 11"
+-- theme.font          = "WenQuanYi Micro Hei 11"
+theme.font          = "YaHei Consolas Hybrid 11"
+
+
+
+
+
 
 theme.bg_normal     = "#05050595"
 theme.bg_focus      = "#191919"

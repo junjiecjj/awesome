@@ -2,6 +2,14 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
+
+-- 天气插件sudo apt-get install weather-util
+-- require("weather")
+
+-- 电量插件sudo apt-get install acpitool
+-- require("power")
+
+
 -- Standard awesome library
 -- 加载Awesome API library
 -- gears 常用的工具
@@ -19,6 +27,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
+
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
@@ -40,9 +49,7 @@ if awesome.startup_errors then
 end
 
 -- Handle runtime errors after startup
--- awesome.connect_signal(event,func) 来注册当时间发生时调用哪个函数，其中
--- event为字符串形式的时间名称
--- func为触发调用的函数
+-- awesome.connect_signal(event,func) 来注册当时间发生时调用哪个函数，其中 event为字符串形式的时间名称,func为触发调用的函数
 do
     local in_error = false
     awesome.connect_signal("debug::error", function (err)
@@ -62,12 +69,13 @@ end
 -- {{{ Variable definitions theme: default  sky  xresources  zenburn
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
+beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
-beautiful.init(string.format("%s/.config/awesome/themes/%s/theme-personal.lua", os.getenv("HOME"), fence))
+-- beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), fence))
 
 
 -- 更改背景图片
-beautiful.get().wallpaper = "~/图片/Wallpapers/wallhaven-72rd8e.jpg"
+beautiful.get().wallpaper = "~/图片/Wallpapers/wallhaven-4yr2mx.jpg"
 
 -- 定义终端、默认编辑器
 -- This is used later as the default terminal and editor to run.
@@ -77,27 +85,28 @@ editor_cmd      =    terminal .. " -e " .. editor
 browser         =    "google-chrome-stable"
 gui_editor      =    "gvim"
 filemgr         =    "thunar"
-gediteditor           = "gedit"
+gediteditor     =    "gedit"
 
 
 -- 设置默认的modkey
 modkey = "Mod4"
+altkey = "Mod1"
 
 -- awful.layout.layouts 中包含了所有可用的layout
 -- 定义可用的布局
 awful.layout.layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.top,
     awful.layout.suit.floating,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
+    awful.layout.suit.magnifier,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
     -- awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
+    -- awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.top,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
@@ -108,14 +117,15 @@ awful.layout.layouts = {
 -- {{{ Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
-   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "manual", terminal .. " -e man awesome" },
-   -- { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "edit config", gediteditor .. "~/..config/awesome/rc.lua" },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end },
-   { "reboot", awesome.reboot },
-   { "shutdown", awesome.shutdown }
+   { "hotkeys",           function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+   { "manual",            terminal .. " -e man awesome" },
+   { "edit config",       editor_cmd .. " " .. awesome.conffile },
+   { "restart",           awesome.restart },
+   { "quit",              function() awesome.quit() end },
+   { "reboot",            awesome.reboot },
+   { "shutdown",          awesome.shutdown },
+   {"关机",               "shutdown -h now"},
+   {"重启",               "reboot"},
 }
 
 appsmenu = {
@@ -140,7 +150,7 @@ appsmenu = {
    -- { "blueman-applet",        "blueman-applet" },
 }
 
-chatmenus = {
+chatsmenu = {
    { "QQ",                  "qq" },
    { "wechat",              "wechat" },
    { "TIM",                 "TIM" },
@@ -181,21 +191,13 @@ gamesmenu = {
    { "snes9x" , "snes9x" }
 }
 
--- -- 自动生成的xdg_menu
--- xdg_menu = require("archmenu")
--- mainmenu_items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
---                    { "Applications", xdgmenu },
---                    { "Eshell", "eshell.sh"},
---                    { "dired", "dired.sh" },
---                    { "Firefox", "firefox" },
---                    { "open terminal", terminal }
--- }
 
-local menu_awesome     = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal    = { "open terminal", terminal }
-local gamemenu         = { "Game",       gamesmenu}
-local appmenu          = { "liaotian",        chatmenus}
-local editormenu         = { "bianjiqi",        editorsmenu}
+local menu_awesome     = { "awesome",        myawesomemenu,    beautiful.awesome_icon }
+local menu_terminal    = { "open terminal",  terminal,      }
+local gamemenu         = { "游戏",           gamesmenu,     }
+local appmenu          = { "APP",            appsmenu,      }
+local chatmenu         = { "视讯",           chatmenus,     }
+local editormenu       = { "编辑器",         editorsmenu,   }
 
 
 -- awful.menu:new(args,parent)用于生成menu对象，
@@ -212,6 +214,7 @@ else
                   menu_terminal,
                   gamemenu,
                   appmenu,
+                  chatmenu,
                   editormenu
                 }
     })
@@ -219,12 +222,13 @@ end
 
 -- mymainmenu = awful.menu({
 --     items = {
---               menu_awesome,
---               { "Debian", debian.menu.Debian_menu.Debian },
---               menu_terminal,
---               gamemenu,
---               appmenu,
---               editormenu
+--               { "awesome",        myawesomemenu,    beautiful.awesome_icon },
+--               { "Debian",         debian.menu.Debian_menu.Debian },
+--               { "open terminal",  terminal        },
+--               { "游戏",           gamesmenu,        beautiful.theme.fav_icon},
+--               { "APP",            appsmenu        },
+--               { "视讯",           chatmenus       },
+--               { "编辑器",         editorsmenu     },
 --             }
 -- })
 
@@ -240,7 +244,9 @@ emacslauncher = awful.widget.launcher({ image = "/usr/share/icons/hicolor/128x12
 
 -- menubar.utils.terminal指定了当应用需要在终端运行时，打开哪个终端
 -- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+menubar.utils.terminal = terminal
+
+-- Set the terminal for applications that require it
 -- }}}
 
 --  awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示当前的键盘布局
@@ -323,72 +329,18 @@ end
 screen.connect_signal("property::geometry", set_wallpaper)
 
 
---==========================================================================================================
---===================================   浮动窗口 ==========================================
---==========================================================================================================
--- 需要自动设置为浮动的程序
--- 只需要把你想要设置为浮动窗口的程序的Instance或者class按照下面的格式写进去就行
--- 了。在awesome下用Mod4 + Ctr + i就可以看到当前程序的instance和class名字
--- {{{ Rules
-awful.rules.rules = {
-   -- All clients will match this rule.
-   {rule = {},
-    properties = {border_width = beautiful.border_width,
-                  border_color = beautiful.border_normal,
-                  focus = true,
-                  keys = clientkeys,
-                  buttons = clientbuttons}},
-   {rule = {class = "MPlayer"},
-    properties = {floating = true}},
-   {rule = {class = "Smplayer"},
-    properties = {floating = true, tag = tags[1][1]}},
-   { rule = { class = "pinentry" },
-     properties = { floating = true } },
-   { rule = { class = "gimp" },
-     properties = { floating = true } },
-   {rule = {class = "Firefox"},
-     properties = {tag = tags[1][1]}},
-   {rule = {class = "Firefox", name = "Download"},
-     properties = {floating = true}},
-   {rule = {class = "VirtualBox"},
-     properties = {floating = true, tag = tags[1][2]}},
-   -- Set Firefox to always map on tags number 2 of screen 1.
-   -- { rule = { class = "Firefox" },
-   --   properties = { tag = tags[1][2] } },
-} -- }}}
 
 --==================================================================================================
 --========================= 定制标签=======================================
 --==================================================================================================
 
 
--- {{{ Tags
--- Define a tag table which hold all screen tags.
-tags = {}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
-end
--- }}}
--- #+END_EXAMPLE
--- 现在我们可以改变每个标签的名字，并为每一个设置默认布局。参考下面这段代码：
- -- {{{ Tags
- -- Define a tag table which will hold all screen tags.
- tags = {
-   names  = { "➊", "➋", "➌", "➍" , "5", "6", "7", "8", "9" },
-   layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1],
-              layouts[1], layouts[1], layouts[1], layouts[1]
- }}
- for s = 1, screen.count() do
-     -- Each screen has its own tag table.
-     tags[s] = awful.tag(tags.names, s, tags.layout)
- end
- -- }}}
 
 
-
-
--- 设置屏幕布局
+--=======================================================================================================
+--========================  设置屏幕布局  ==============================================
+--=======================================================================================================
+--  awful.screen.connect_for_each_screen (func) 为每个已存在的，且后面新创建的屏幕都调用 func, 其中 func 接受一个 screen 作为参数
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
@@ -447,40 +399,84 @@ end)
 -- }}}
 
 
+--===============================================================================================================
+--==================  自启动程序 =======================================
+--===============================================================================================================
+-- -- 方法一：
+-- autorun = true
+-- autorunApps =
+-- {
+--     "nm-applet &",
+--     "blueman-applet  &",
+--     "xscreensaver  -no-splash &",
+--     "redshift-gtk  &",
+--     "picom --experimental-backends -b",
+--     "feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/",
+--     "nohup  flameshot >/dev/null 2>&1 &",
+--     "dunst &",
+--     "copyq &",
+--     "fcitx &",
+--     "fcitx5 &",
+--     --  yinpin
+--     "nohup pasystray  >/dev/null 2>&1 &",
+--     "nohup kmix   >/dev/null 2>&1 &",
+--     "nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &",
+--     "nohup mictray   >/dev/null 2>&1 &",
+--     "gnome-settings-daemon"
+-- }
 
--- <span style="font-size:18px;">
-autorun = true
-autorunApps =
-{
-    "nm-applet &",
-    "blueman-applet  &",
-    "xscreensaver  -no-splash &",
-    "redshift-gtk  &",
-    "picom --experimental-backends -b",
-    "feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/",
-    "nohup  flameshot >/dev/null 2>&1 &",
-    "dunst &",
-    "copyq &",
-    "fcitx &",
-    "fcitx5 &",
-    --  yinpin
-    "nohup pasystray  >/dev/null 2>&1 &",
-    "nohup kmix   >/dev/null 2>&1 &",
-    "nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &",
-    "nohup mictray   >/dev/null 2>&1 &",
-    "gnome-settings-daemon"
-}
+-- if autorun then
+--     for app = 1, #autorunApps do
+--         awful.util.spawn_with_shell(autorunApps[app])
+--     end
+-- end
+-- -- 但这种自启动方式会在每次启动Awesome的时候都运行这些程序，每次需要重启Awesome时，会发现这些程序又再次启动了一次。因此最好是让这些程序只启动一次。将上面的代码改为： 方法二
 
-if autorun then
-    for app = 1, #autorunApps do
-        awful.util.spawn_with_shell(autorunApps[app])
+
+-- -- 方法二：
+-- function run_once(cmd)
+--   findme = cmd
+--   firstspace = cmd:find(" ")
+--   if firstspace then
+--     findme = cmd:sub(0, firstspace-1)
+--   end
+--   awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+-- endw
+
+
+--  "by kelu",
+local function run_once(cmd_arr)
+    for _, cmd in ipairs(cmd_arr) do
+        awful.spawn.with_shell(string.format("pgrep -u $USER -fx '%s' > /dev/null || (%s)", cmd, cmd))
     end
 end
--- </span>
 
--- ============================================================================================================
----- 设置快捷键
--- ============================================================================================================
+run_once({ "kbdd" })
+run_once({ "redshift-gtk &" })
+run_once({ "blueman-applet &" })
+run_once({ "nm-applet &"  })
+run_once({ "xscreensaver  -no-splash &"  })
+run_once({  "picom --experimental-backends -b" })
+run_once({ "feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"  })
+run_once({ "nohup  flameshot >/dev/null 2>&1 &"  })
+run_once({ "dunst &"  })
+run_once({ "fcitx &" })
+run_once({ "fcitx5 &" })
+run_once({ "nohup pasystray  >/dev/null 2>&1 &"  })
+run_once({ "nohup kmix   >/dev/null 2>&1 &" })
+run_once({ "nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"  })
+run_once({ "nohup mictray   >/dev/null 2>&1 &"  })
+run_once({ "gnome-settings-daemon"  })
+
+
+
+
+-- 方法三：
+-- awful.spawn.with_shell("~/.config/awesome/autostart.sh &")
+
+--============================================================================================================
+--==================================   设置快捷键 ====================================
+--============================================================================================================
 
 -- {{{ Mouse bindings
 -- 设置全局鼠标操作
@@ -497,8 +493,8 @@ root.buttons(gears.table.join(
 -- 全局快捷键在任何情况下都可触发，当触发全局快捷键的函数时，awesome并不会传递任何参数
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    --
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+    -- 打开所有的快捷键命令列表
+    awful.key({ modkey,           }, "h",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     --  查看前一个tag  切换标签  Mod4 + Left
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -506,6 +502,13 @@ globalkeys = gears.table.join(
     --  查看后一个tag   Mod4 + Right
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
+    --  查看前一个tag  切换标签  Mod4 + Left
+    awful.key({ modkey,           }, ";",   awful.tag.viewprev,
+              {description = "view previous", group = "tag"}),
+    --  查看后一个tag   Mod4 + Right
+    awful.key({ modkey,           }, "'",  awful.tag.viewnext,
+              {description = "view next", group = "tag"}),
+
     -- Mod4 + Esc 快速切换到上一个桌面
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
@@ -523,6 +526,21 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
+    -- 切换至下一窗口 Mod4 + j    切换到其它窗口
+    awful.key({ modkey,           }, ".",
+        function ()
+            awful.client.focus.byidx( 1)
+        end,
+        {description = "focus next by index", group = "client"}
+    ),
+    --  切换至上一窗口 Mod4 + k
+    awful.key({ modkey,           }, ",",
+        function ()
+            awful.client.focus.byidx(-1)
+        end,
+        {description = "focus previous by index", group = "client"}
+    ),
+
     --  在两个窗口间切换  Mod4 + Tab
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -549,15 +567,26 @@ globalkeys = gears.table.join(
     --  将当前窗口与下一窗口互换位置  Mod4 + Shift + j
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
+
+    --  将当前窗口与下一窗口互换位置  Mod4 + Shift + j
+    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
+              {description = "swap with next client by index", group = "client"}),
     -- 将当前窗口与上一窗口互换位置  Mod4 + Shift + k
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
-    --  切换到下一个xianshiqi屏幕  Mod4 + Control + j
+    --  切换到下一个显示器屏幕  Mod4 + Control + j
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
-    --  切换到上一个xianshiqi屏幕 Mod4 + Control + k
+    --  切换到上一个显示器屏幕 Mod4 + Control + k
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
+    --  切换到下一个显示器屏幕  Mod4 + ]
+    awful.key({ modkey, "Control" }, "]", function () awful.screen.focus_relative( 1) end,
+              {description = "focus the next screen", group = "screen"}),
+    --  切换到上一个显示器屏幕 Mod4 + [
+    awful.key({ modkey, "Control" }, "[", function () awful.screen.focus_relative(-1) end,
+              {description = "focus the previous screen", group = "screen"}),
+
     --
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
@@ -573,7 +602,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Control" }, "e", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
     --  Mod4 + l增加窗口大小   调整当前窗口大小
-    awful.key({ modkey,           }, "XK_equal",     function () awful.tag.incmwfact( 0.05)          end,
+    awful.key({ modkey,           }, "=",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
     -- 减小窗口大小 Mod4 + h
     awful.key({ modkey,           }, "-",     function () awful.tag.incmwfact(-0.05)          end,
@@ -584,10 +613,10 @@ globalkeys = gears.table.join(
     --  增加主窗口个数 Mod4 + Shift + l
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
-
+    -- 增加主轴的聚焦窗口数量
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
-
+    -- 减少主轴的聚焦窗口数量
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
     --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + space
@@ -610,24 +639,26 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    --	mod4 + r  打开程序或命令
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
+    ----	mod4 + r  打开程序或命令
+    --awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    --          {description = "run prompt", group = "launcher"}),
 
-    --  mod4 + x 执行lua代码
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
-                    prompt       = "Run Lua code: ",
-                    textbox      = awful.screen.focused().mypromptbox.widget,
-                    exe_callback = awful.util.eval,
-                    history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"}),
-    -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"}),
+    -- --  mod4 + x 执行lua代码
+    -- awful.key({ modkey }, "x",
+    --           function ()
+    --               awful.prompt.run {
+    --                 prompt       = "Run Lua code: ",
+    --                 textbox      = awful.screen.focused().mypromptbox.widget,
+    --                 exe_callback = awful.util.eval,
+    --                 history_path = awful.util.get_cache_dir() .. "/history_eval"
+    --               }
+    --           end,
+    --           {description = "lua execute prompt", group = "awesome"}),
+
+    -- -- Menubar
+    -- --  显示菜单栏
+    -- awful.key({ modkey }, "p", function() menubar.show() end,
+    --           {description = "show the menubar", group = "launcher"}),
 
 
     -- 亮度/音量快捷键
@@ -641,6 +672,12 @@ globalkeys = gears.table.join(
               {description = "volume down", group = "hotkeys"}),
     awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
               {description = "toggle mute", group = "hotkeys"}),
+
+    awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "mpc next" ) end),
+    awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "mpc prev" ) end),
+    awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "mpc play" ) end),
+    awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "mpc pause" ) end),
+
     -- 截图快捷键
     awful.key({}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ") end,
               {description = "take a screenshot", group = "hotkeys"}),
@@ -654,9 +691,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "r", function() awful.spawn.with_shell("rofi  -show combi") end,
               {description = "rofi程序启动器", group = "hotkeys"}),
 
-    -- goolel
+    -- goole浏览器
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
               {description = "google  Browser", group = "hotkeys"})
+
 
 )
 
@@ -677,14 +715,14 @@ clientkeys = gears.table.join(
     --  切换当前窗口是否为浮动     Mod4 + Ctrl + Space
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
-
+    --
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
 
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
-    --  标记窗口（可标记多个）Mod4 + t
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
+    --  标记窗口（可标记多个）Mod4 + Shift + t
+    awful.key({ modkey,   "Shift" }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
     --  窗口最小化	Mod4 + n
     awful.key({ modkey,           }, "n",
@@ -917,3 +955,30 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+
+
+--==========================================================================================================
+--===================================   浮动窗口 ==========================================
+--==========================================================================================================
+-- 需要自动设置为浮动的程序
+-- 只需要把你想要设置为浮动窗口的程序的Instance或者class按照下面的格式写进去就行
+-- 了。在awesome下用Mod4 + Ctr + i就可以看到当前程序的instance和class名字
+awful.rules.rules = {
+   -- All clients will match this rule.
+   {rule = {},
+    properties = {border_width = beautiful.border_width,
+                  border_color = beautiful.border_normal,
+                  focus = true,
+                  keys = clientkeys,
+                  buttons = clientbuttons}},
+   {rule = {class = "MPlayer"},
+    properties = {floating = true}},
+   { rule = { class = "pinentry" },
+     properties = { floating = true } },
+   { rule = { class = "gimp" },
+     properties = { floating = true } },
+   {rule = {class = "Firefox", name = "Download"},
+     properties = {floating = true}}
+}
+
