@@ -3,6 +3,9 @@
 pcall(require, "luarocks.loader")
 
 
+--  状态栏插件
+local vicious = require("vicious")
+
 -- 天气插件sudo apt-get install weather-util
 -- require("weather")
 
@@ -20,6 +23,7 @@ pcall(require, "luarocks.loader")
 -- beautiful Awesome主题相关的功能
 local gears = require("gears")
 local awful = require("awful")
+-- 自动聚焦
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
@@ -99,7 +103,7 @@ awful.layout.layouts = {
     awful.layout.suit.tile.bottom,
     awful.layout.suit.floating,
     awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.fair.horizontal,
     awful.layout.suit.magnifier,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
@@ -262,7 +266,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- timezone
 -- 指明时区默认为本地时区
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock("%Y-%m-%d %a %H:%M:%S",1)
 
 
 --定义点击tag的行为
@@ -502,10 +506,10 @@ globalkeys = gears.table.join(
     --  查看后一个tag   Mod4 + Right
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
-    --  查看前一个tag  切换标签  Mod4 + Left
+    --  查看前一个tag  切换标签  Mod4 + ;
     awful.key({ modkey,           }, ";",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
-    --  查看后一个tag   Mod4 + Right
+    --  查看后一个tag   Mod4 + '
     awful.key({ modkey,           }, "'",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
 
@@ -526,14 +530,29 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    -- 切换至下一窗口 Mod4 + j    切换到其它窗口
+    -- 切换至下一窗口 Mod4 + w    切换到其它窗口
+    awful.key({ modkey,           }, "w",
+        function ()
+            awful.client.focus.byidx( 1)
+        end,
+        {description = "focus next by index", group = "client"}
+    ),
+    --  切换至上一窗口 Mod4 + q
+    awful.key({ modkey,           }, "q",
+        function ()
+            awful.client.focus.byidx(-1)
+        end,
+        {description = "focus previous by index", group = "client"}
+    ),
+
+    -- 切换至下一窗口 Mod4 + .    切换到其它窗口
     awful.key({ modkey,           }, ".",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    --  切换至上一窗口 Mod4 + k
+    --  切换至上一窗口 Mod4 + ,
     awful.key({ modkey,           }, ",",
         function ()
             awful.client.focus.byidx(-1)
@@ -559,13 +578,13 @@ globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
-    -- 打开菜单 mod4 + w
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
+    -- 打开菜单 mod4 + u
+    awful.key({ modkey,           }, "u", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
-    --  将当前窗口与下一窗口互换位置  Mod4 + Shift + j
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
+    --  将当前窗口与下一窗口互换位置  Mod4 + Shift + Enter
+    awful.key({ modkey, "Shift"   }, "Return", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
 
     --  将当前窗口与下一窗口互换位置  Mod4 + Shift + j
@@ -581,15 +600,15 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
     --  切换到下一个显示器屏幕  Mod4 + ]
-    awful.key({ modkey, "Control" }, "]", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey,           }, "]", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
     --  切换到上一个显示器屏幕 Mod4 + [
-    awful.key({ modkey, "Control" }, "[", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
 
-    --
-    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
-              {description = "jump to urgent client", group = "client"}),
+    ----
+    --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
+    --          {description = "jump to urgent client", group = "client"}),
 
     -- Standard program
     --  打开终端  mod4 + enter
@@ -613,17 +632,17 @@ globalkeys = gears.table.join(
     --  增加主窗口个数 Mod4 + Shift + l
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
-    -- 增加主轴的聚焦窗口数量
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
-              {description = "increase the number of columns", group = "layout"}),
-    -- 减少主轴的聚焦窗口数量
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
-              {description = "decrease the number of columns", group = "layout"}),
+    -- -- 增加主轴的聚焦窗口数量
+    -- awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+    --           {description = "increase the number of columns", group = "layout"}),
+    -- -- 减少主轴的聚焦窗口数量
+    -- awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
+    --           {description = "decrease the number of columns", group = "layout"}),
     --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + space
     awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
-    --  反向更改桌面布局  mod4 + shift + space
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+    --  反向更改桌面布局  mod4 + Control + space
+    awful.key({ modkey, "Control"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
     -- 窗口最小化还原  Mod4 + Ctrl + n
     awful.key({ modkey, "Control" }, "n",
@@ -656,7 +675,7 @@ globalkeys = gears.table.join(
     --           {description = "lua execute prompt", group = "awesome"}),
 
     -- -- Menubar
-    -- --  显示菜单栏
+    -- --  显示菜单栏，和mod+u以及rofi功能类似
     -- awful.key({ modkey }, "p", function() menubar.show() end,
     --           {description = "show the menubar", group = "launcher"}),
 
@@ -666,6 +685,7 @@ globalkeys = gears.table.join(
               {description = "+5%", group = "hotkeys"}),
     awful.key({}, "XF86MonBrightnessDown", function() os.execute("xbacklight -dec 5") end,
               {description = "-5%", group = "hotkeys"}),
+
     awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
               {description = "volume up", group = "hotkeys"}),
     awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
@@ -673,10 +693,73 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
               {description = "toggle mute", group = "hotkeys"}),
 
+    -- ALSA volume control
+    awful.key({  }, "XF86AudioRaiseVolume",
+        function ()
+            os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
+            beautiful.volume.update()
+        end,{description = "volume up", group = "hotkeys"}),
+    awful.key({  }, "XF86AudioLowerVolume",
+        function ()
+            os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
+            beautiful.volume.update()
+        end,{description = "volume down", group = "hotkeys"}),
+    awful.key({  }, "XF86AudioMute",
+        function ()
+            os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
+            beautiful.volume.update()
+        end,{description = "toggle mute", group = "hotkeys"}),
+
+
     awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "mpc next" ) end),
     awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "mpc prev" ) end),
     awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "mpc play" ) end),
     awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "mpc pause" ) end),
+
+    -- MPD control
+    awful.key({ altkey, "Control" }, "Up",
+        function ()
+            awful.spawn.with_shell("mpc toggle")
+            beautiful.mpd.update()
+        end,{description = "mpc toggle", group = "widgets"}),
+    awful.key({ altkey, "Control" }, "Down",
+        function ()
+            awful.spawn.with_shell("mpc stop")
+            beautiful.mpd.update()
+        end,{description = "mpc stop", group = "widgets"}),
+    awful.key({ altkey, "Control" }, "Left",
+        function ()
+            awful.spawn.with_shell("mpc prev")
+            beautiful.mpd.update()
+        end,{description = "mpc prev", group = "widgets"}),
+    awful.key({ altkey, "Control" }, "Right",
+        function ()
+            awful.spawn.with_shell("mpc next")
+            beautiful.mpd.update()
+        end,{description = "mpc next", group = "widgets"}),
+    awful.key({ altkey }, "0",
+        function ()
+            local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
+            if beautiful.mpd.timer.started then
+                beautiful.mpd.timer:stop()
+                common.text = common.text .. lain.util.markup.bold("OFF")
+            else
+                beautiful.mpd.timer:start()
+                common.text = common.text .. lain.util.markup.bold("ON")
+            end
+            naughty.notify(common)
+        end,{description = "mpc on/off", group = "widgets"}),
+
+
+
+    -- Widgets popups
+    awful.key({ altkey, }, "c", function () lain.widget.calendar.show(7) end,
+              {description = "show calendar", group = "widgets"}),
+    awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
+              {description = "show filesystem", group = "widgets"}),
+    awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
+              {description = "show weather", group = "widgets"}),
+
 
     -- 截图快捷键
     awful.key({}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ") end,
@@ -693,7 +776,20 @@ globalkeys = gears.table.join(
 
     -- goole浏览器
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
-              {description = "google  Browser", group = "hotkeys"})
+              {description = "google  Browser", group = "hotkeys"}),
+    -- slock锁屏
+    awful.key({ modkey, "Mod1" }, "l", function() awful.spawn.with_shell("slock") end,
+              {description = "slock锁屏", group = "hotkeys"}),
+    -- xscreensaver锁屏
+    awful.key({ modkey, "Mod1" }, "x", function() awful.spawn.with_shell("xscreensaver-command -lock") end,
+              {description = "xscreensaver锁屏", group = "hotkeys"}),
+    -- betterlockscreen锁屏
+    awful.key({ modkey, "Mod1" }, "b", function() awful.spawn.with_shell("betterlockscreen -l") end,
+              {description = "betterlockscreen锁屏", group = "hotkeys"}),
+    -- betterlockscreen锁屏
+    awful.key({ modkey, "Control" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
+              {description = "betterlockscreen锁屏", group = "hotkeys"})
+
 
 
 )
@@ -712,8 +808,8 @@ clientkeys = gears.table.join(
    --  关闭当前窗口  Mod4 + Shift + q
     awful.key({ modkey, "Shift"   }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
-    --  切换当前窗口是否为浮动     Mod4 + Ctrl + Space
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
+    --  切换当前窗口是否为浮动     Mod4 + Shift + Space
+    awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     --
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
@@ -882,8 +978,9 @@ awful.rules.rules = {
       }, properties = { floating = true }},
 
     -- Add titlebars to normal clients and dialogs
+    --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = flase }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
