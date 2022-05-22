@@ -273,6 +273,7 @@ local mywifisig = awful.widget.watch(
 wificon:connect_signal("button::press", function() awful.spawn(string.format("%s -e wavemon", awful.util.terminal)) end)
 
 -- Weather
+--[[ to be set before use
 theme.weather = lain.widget.weather({
     city_id = 2643743, -- placeholder (London)
     notification_preset = { font = "Monospace 10" },
@@ -281,6 +282,7 @@ theme.weather = lain.widget.weather({
         widget:set_markup(" " .. markup.font(theme.font, units .. "°C") .. " ")
     end
 })
+--]]
 
 -- Launcher
 local mylauncher = awful.widget.button({image = theme.awesome_icon})
@@ -398,7 +400,7 @@ function theme.at_screen_connect(s)
     gears.wallpaper.maximized(wallpaper, s, true)
 
     -- Tags
-    awful.tag(awful.util.tagnames, s, awful.layout.layouts)
+    awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -430,11 +432,10 @@ function theme.at_screen_connect(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(25), bg = gears.color.create_png_pattern(theme.panelbg) })
 
-    local wiboxlayout = wibox.layout.align.horizontal()
-    wiboxlayout.expand = "none"
     -- Add widgets to the wibox
     s.mywibox:setup {
-        layout = wiboxlayout,
+        layout = wibox.layout.align.horizontal,
+        expand = "none",
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             s.mypromptbox,
@@ -442,15 +443,16 @@ function theme.at_screen_connect(s)
             s.mytasklist,
         },
         { -- Middle widgets
-            layout = wibox.layout.fixed.horizontal,
-            mytextclock,
+            layout = wibox.layout.flex.horizontal,
+            max_widget_size = 1500,
+            mytextclock
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget { nil, nil, theme.mpd.widget, layout = wibox.layout.align.horizontal },
             rspace0,
-            theme.weather.icon,
-            theme.weather.widget,
+            --theme.weather.icon,
+            --theme.weather.widget,
             rspace1,
             wificon,
             rspace0,

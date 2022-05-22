@@ -43,6 +43,22 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- 通知
 local naughty = require("naughty")
+naughty.config.defaults.shape = gears.shape.rounded_rect
+naughty.config.defaults.position = 'top_right'
+-- Naughty presets
+naughty.config.defaults.timeout = 5
+naughty.config.defaults.screen = 1
+naughty.config.defaults.margin = 8
+naughty.config.defaults.gap = 1
+naughty.config.defaults.ontop = true
+naughty.config.defaults.font = "CaskadiaCove Nerd Font Mono Regular 10"
+naughty.config.defaults.icon = nil
+naughty.config.defaults.icon_size = 32
+naughty.config.defaults.fg = beautiful.fg_tooltip
+naughty.config.defaults.bg = beautiful.bg_tooltip
+naughty.config.defaults.border_color = beautiful.border_tooltip
+naughty.config.defaults.border_width = 2
+naughty.config.defaults.hover_timeout = nil
 
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
@@ -84,14 +100,16 @@ end
 -- beautiful.init(config) 函数初始化主题
 -- {{{ Variable definitions theme: default  sky  xresources  zenburn
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
--- beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), fence))
--- beautiful.init(awful.util.getdir("config") .. "/themes/fency/theme.lua")
+-- 颜色主题：cool-blue  bamboo  brown  grey-old  grey-clean rbown  sky-grey  snow  wabbit  worm  fence
+beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), "snow"))
+
+-- beautiful.init(awful.util.getdir("config") .. "/themes/elric/theme.lua")
+-- beautiful.init("~/.config/awesome/themes/bamboo/theme.lua")
 
 -- 更改背景图片
-beautiful.get().wallpaper = "~/图片/Wallpapers/wallhaven-4yr2mx.jpg"
+-- beautiful.get().wallpaper = "~/图片/Wallpapers/wallhaven-4yr2mx.jpg"
 
 -- 定义终端、默认编辑器
 -- This is used later as the default terminal and editor to run.
@@ -99,8 +117,11 @@ terminal        =    "st"
 editor          =    os.getenv("EDITOR") or "nvim"
 editor_cmd      =    terminal .. " -e " .. editor
 browser         =    "google-chrome-stable"
+music           =    "netease-cloud-music"
 gui_editor      =    "gvim"
 filemgr         =    "thunar"
+filemanager     =    "pcmanfm"
+flameshot       =    "flameshot gui"
 gediteditor     =    "gedit"
 
 
@@ -469,6 +490,9 @@ awful.screen.connect_for_each_screen(function(s)
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            spacer,
+            ram_widget(),
+            spacer,
             cpu_widget({
                     width = 70,
                     step_width = 2,
@@ -476,9 +500,6 @@ awful.screen.connect_for_each_screen(function(s)
                     --enable_kill_button=true,
                     timeout=5
                     }),
-            spacer,
-            spacer,
-            ram_widget(),
             spacer,
             mysystray,
             spacer,
@@ -567,39 +588,44 @@ end)
 
 
 -- -- 方法二：
--- function run_once(cmd)
---   findme = cmd
---   firstspace = cmd:find(" ")
---   if firstspace then
---     findme = cmd:sub(0, firstspace-1)
---   end
---   awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
--- endw
 
-
---  "by kelu",
+-- Autostart windowless processes
 local function run_once(cmd_arr)
     for _, cmd in ipairs(cmd_arr) do
-        awful.spawn.with_shell(string.format("pgrep -u $USER -fx '%s' > /dev/null || (%s)", cmd, cmd))
+        findme = cmd
+        firstspace = cmd:find(" ")
+        if firstspace then
+            findme = cmd:sub(0, firstspace-1)
+        end
+        awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
     end
 end
 
-run_once({ "kbdd" })
-run_once({ "redshift-gtk &" })
-run_once({ "blueman-applet &" })
-run_once({ "nm-applet &"  })
-run_once({ "xscreensaver  -no-splash &"  })
-run_once({  "picom --experimental-backends -b" })
-run_once({ "feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"  })
-run_once({ "nohup  flameshot >/dev/null 2>&1 &"  })
-run_once({ "dunst &"  })
-run_once({ "fcitx &" })
-run_once({ "fcitx5 &" })
-run_once({ "nohup pasystray  >/dev/null 2>&1 &"  })
-run_once({ "nohup kmix   >/dev/null 2>&1 &" })
-run_once({ "nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"  })
-run_once({ "nohup mictray   >/dev/null 2>&1 &"  })
-run_once({ "gnome-settings-daemon"  })
+
+-- --  "by kelu",
+-- local function run_once(cmd_arr)
+--     for _, cmd in ipairs(cmd_arr) do
+--         awful.spawn.with_shell(string.format("pgrep -u $USER -fx '%s' > /dev/null || (%s)", cmd, cmd))
+--     end
+-- end
+
+
+run_once({"kbdd"})
+run_once({"redshift-gtk &"})
+run_once({"blueman-applet &"})
+run_once({"nm-applet &"})
+run_once({"xscreensaver  -no-splash &"})
+run_once({ "picom --experimental-backends -b"})
+run_once({"feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"})
+run_once({"nohup  flameshot >/dev/null 2>&1 &"  })
+run_once({"dunst &"})
+run_once({"fcitx &"})
+run_once({"fcitx5 &"})
+run_once({"nohup pasystray  >/dev/null 2>&1 &"})
+run_once({"nohup kmix   >/dev/null 2>&1 &"})
+run_once({"nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"})
+run_once({"nohup mictray   >/dev/null 2>&1 &"})
+run_once({"gnome-settings-daemon"})
 
 
 
@@ -645,6 +671,10 @@ globalkeys = gears.table.join(
     -- Mod4 + Esc 快速切换到上一个桌面
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
+    -- Mod4 + b 快速切换到上一个桌面
+    awful.key({ modkey,           }, "b", awful.tag.history.restore,
+              {description = "go back", group = "tag"}),
+
     -- 切换至下一窗口 Mod4 + j    切换到其它窗口
     awful.key({ modkey,           }, "j",
         function ()
@@ -768,10 +798,10 @@ globalkeys = gears.table.join(
     -- awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
     --           {description = "decrease the number of columns", group = "layout"}),
     --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + space
-    awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
+    awful.key({ modkey,         }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
     --  反向更改桌面布局  mod4 + Control + space
-    awful.key({ modkey, "Control"   }, "space", function () awful.layout.inc(-1)                end,
+    awful.key({ modkey, "Control"  }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
     -- 窗口最小化还原  Mod4 + Ctrl + n
     awful.key({ modkey, "Control" }, "n",
@@ -885,13 +915,13 @@ globalkeys = gears.table.join(
 
 
 
-    -- Widgets popups
-    awful.key({ altkey, }, "c", function () lain.widget.calendar.show(7) end,
-              {description = "show calendar", group = "widgets"}),
-    awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
-              {description = "show filesystem", group = "widgets"}),
-    awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
-              {description = "show weather", group = "widgets"}),
+    -- -- Widgets popups
+    -- awful.key({ altkey, }, "p", function () lain.widget.calendar.show(7) end,
+    --           {description = "show calendar", group = "widgets"}),
+    -- awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
+    --           {description = "show filesystem", group = "widgets"}),
+    -- awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
+    --           {description = "show weather", group = "widgets"}),
 
 
     -- 截图快捷键
@@ -919,7 +949,7 @@ globalkeys = gears.table.join(
     -- betterlockscreen锁屏
     awful.key({ modkey, "Mod1" }, "b", function() awful.spawn.with_shell("betterlockscreen -l") end,
               {description = "betterlockscreen锁屏", group = "hotkeys"}),
-    -- betterlockscreen锁屏
+    --  feh更换壁纸
     awful.key({ modkey, "Control" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
               {description = "betterlockscreen锁屏", group = "hotkeys"})
 
@@ -1063,20 +1093,96 @@ clientbuttons = gears.table.join(
 root.keys(globalkeys)
 -- }}}
 
+
+--============================================================================================================
+--==================================   设置快捷键over ====================================
+--============================================================================================================
+
+--============================================================================================================
+--==================================   设置规则表 ====================================
+--============================================================================================================
+
+
+
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
+      properties = {
+                     border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.no_overlap+awful.placement.no_offscreen
+                     -- placement = awful.placement.no_overlap+awful.placement.no_offscreen,
+                     placement = awful.placement.centered + awful.placement.top+awful.placement.no_overlap + awful.placement.no_offscreen
      }
+    },
+    { rule = { class = "MPlayer" },
+      properties = { floating = true } },
+    { rule = { class = "pinentry" },
+      properties = { floating = true } },
+    { rule = { class = "gimp" },
+      properties = { floating = true } },
+    { rule = { class = "Firefox" },
+      properties = { floating = true } },
+    -- 这里class通过xprop程序来获取
+    { rule = { class = "VirtualBox Manager" },
+      properties = { tag="5.VM", switchtotag = true } },
+    {
+        rule_any = {class = {"netease-cloud-music"}},
+        properties = {
+            floating = true,
+            placement = awful.placement.centered,
+            border_width = 2,
+            titlebars_enabled = true
+        }
+    },
+    {rule = {class = 'Alacritty'}, properties = {width = 960, height = 640}},
+    {
+        rule = {class = 'uTools'},
+        properties = {
+            placement = (awful.placement.center + awful.placement.top),
+            ontop = true,
+            border_width = 0
+        }
+    },
+   {
+        rule = {class = 'Wine'},
+        properties = {
+            border_width = 0,
+            floating = true,
+            titlebars_enabled = false
+        }
+    },
+    {
+        rule = {class = 'qqmusic'},
+        properties = {
+            floating = true,
+            placement = awful.placement.centered,
+            width = 640,
+            height = 48,
+            titlebars_enabled = false
+        }
+    },
+    {
+        rule = {class = 'TeamViewer'},
+        properties = {
+            floating = true,
+            placement = awful.placement.centered
+            --       titlebars_enabled = false
+        }
+    },
+    {
+        rule = {class = 'Opera'},
+        properties = {
+            --       floating = true,
+            placement = awful.placement.centered,
+            titlebars_enabled = false
+        }
     },
 
     -- Floating clients.
@@ -1113,7 +1219,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = flase }
+      }, properties = { titlebars_enabled = true }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
@@ -1121,6 +1227,11 @@ awful.rules.rules = {
     --   properties = { screen = 1, tag = "2" } },
 }
 -- }}}
+
+
+--========================================================================================================================
+--=====================  注册事件发生时的触发函数,该函数接受一个窗口(client对象)作为参数 =============
+--========================================================================================================================
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.

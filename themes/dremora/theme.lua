@@ -17,7 +17,7 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/dremora"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "Misc Tamsyn 10.5"
+theme.font                                      = "Terminus 10.5"
 theme.taglist_font                              = "Icons 10"
 theme.fg_normal                                 = "#747474"
 theme.fg_focus                                  = "#DDDCFF"
@@ -87,13 +87,13 @@ mytextclock.font = theme.font
 theme.cal = lain.widget.cal({
     attach_to = { mytextclock },
     notification_preset = {
-        font = "Misc Tamsyn 11",
+        font = "Terminus 11",
         fg   = white,
         bg   = theme.bg_normal
 }})
 
 -- Mail IMAP check
---[[ commented because it needs to be set before use
+--[[ to be set before use
 theme.mail = lain.widget.imap({
     timeout  = 180,
     server   = "server",
@@ -136,7 +136,7 @@ theme.mpd = lain.widget.mpd({
 -- /home fs
 --[[ commented because it needs Gio/Glib >= 2.54
 theme.fs = lain.widget.fs({
-    notification_preset = { fg = white, bg = theme.bg_normal, font = "Misc Tamsyn 10.5" },
+    notification_preset = { fg = white, bg = theme.bg_normal, font = "Terminus 10.5" },
     settings  = function()
         fs_header = ""
         fs_p      = ""
@@ -178,13 +178,16 @@ theme.volume = lain.widget.alsa({
 })
 
 -- Weather
+--[[ to be set before use
 theme.weather = lain.widget.weather({
+    --APPID =
     city_id = 2643743, -- placeholder (London)
     notification_preset = { fg = white }
 })
+--]]
 
 -- Separators
-local first     = wibox.widget.textbox('<span font="Misc Tamsyn 4"> </span>')
+local first     = wibox.widget.textbox('<span font="Terminus 4"> </span>')
 local arrl_pre  = separators.arrow_right("alpha", "#1A1A1A")
 local arrl_post = separators.arrow_right("#1A1A1A", "alpha")
 
@@ -200,7 +203,7 @@ function theme.at_screen_connect(s)
     gears.wallpaper.maximized(wallpaper, s, true)
 
     -- Tags
-    awful.tag(awful.util.tagnames, s, awful.layout.layouts)
+    awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
