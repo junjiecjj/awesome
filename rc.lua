@@ -8,6 +8,12 @@ local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout
 local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
 local net_speed_widget = require("awesome-wm-widgets.net-speed-widget.net-speed")
 local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
+local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+-- local logout_popup = require("awesome-wm-widgets.logout-popup-widget.logout-popup")
+local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
+-- local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
+local ram_widget = require("awesome-wm-widgets.ram-widget.ram-widget")
+
 
 --  状态栏插件
 local vicious = require("vicious")
@@ -472,17 +478,45 @@ awful.screen.connect_for_each_screen(function(s)
                     }),
             spacer,
             spacer,
+            ram_widget(),
             spacer,
             mysystray,
             spacer,
             -- battery_widget(),
             net_speed_widget(),
             spacer,
-             volume_widget{
-                        widget_type = 'arc'
+            volume_widget{
+                       widget_type = 'arc'
                     },
             spacer,
+            spacer,
+            batteryarc_widget({
+                        show_current_level = true,
+                        arc_thickness = 1,
+                    }),
+            -- weather_curl_widget({
+            --     api_key='254413c4983a9d2ec7d40932524c97b0',
+            --     coordinates = {45.5017, -73.5673},
+            --     time_format_12h = true,
+            --     units = 'imperial',
+            --     both_units_widget = true,
+            --     font_name = 'Carter One',
+            --     icons = 'VitalyGorbachev',
+            --     icons_extension = '.svg',
+            --     show_hourly_forecast = true,
+            --     show_daily_forecast = true,
+            -- }),
+            spacer,
+            spacer,
             mytextclock,
+            spacer,
+            spacer,
+            brightness_widget{
+                        type = 'icon_and_text',
+                        program = 'xbacklight',
+                        step = 2,
+                    },
+            spacer,
             logout_menu_widget(),
             spacer,
             spacer,
@@ -804,6 +838,10 @@ globalkeys = gears.table.join(
     --         os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
     --         beautiful.volume.update()
     --     end,{description = "toggle mute", group = "hotkeys"}),
+
+
+    awful.key({ modkey, "Control"}, "+", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
+    awful.key({ modkey, "Control"}, "-", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
 
 
     awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "mpc next" ) end),
