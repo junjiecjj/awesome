@@ -936,6 +936,9 @@ globalkeys = gears.table.join(
     -- rofi程序启动器
     awful.key({ modkey }, "r", function() awful.spawn.with_shell("rofi  -show combi") end,
               {description = "rofi程序启动器", group = "hotkeys"}),
+    -- gmrun程序启动器
+    awful.key({ modkey }, "\", function() awful.spawn.with_shell("gmrun") end,
+              {description = "gmrun程序启动器", group = "hotkeys"}),
 
     -- goole浏览器
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
