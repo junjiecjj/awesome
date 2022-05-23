@@ -742,10 +742,6 @@ globalkeys = gears.table.join(
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
-    --  将当前窗口与下一窗口互换位置  Mod4 + Shift + Enter
-    awful.key({ modkey, "Shift"   }, "Return", function () awful.client.swap.byidx(  1)    end,
-              {description = "swap with next client by index", group = "client"}),
-
     --  将当前窗口与下一窗口互换位置  Mod4 + Shift + j
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
@@ -977,8 +973,8 @@ clientkeys = gears.table.join(
     --  切换当前窗口是否为浮动     Mod4 +  Space
     awful.key({ modkey,           }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
-    --
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
+    -- 将当前窗口提升为主窗口，单向
+    awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
 
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
