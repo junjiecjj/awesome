@@ -787,12 +787,12 @@ globalkeys = gears.table.join(
     --  增加主窗口个数 Mod4 + Shift + l
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
-    -- -- 增加主轴的聚焦窗口数量
-    -- awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
-    --           {description = "increase the number of columns", group = "layout"}),
-    -- -- 减少主轴的聚焦窗口数量
-    -- awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
-    --           {description = "decrease the number of columns", group = "layout"}),
+    -- 增加主轴的聚焦窗口数量
+    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+              {description = "increase the number of columns", group = "layout"}),
+    -- 减少主轴的聚焦窗口数量
+    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
+              {description = "decrease the number of columns", group = "layout"}),
     --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + Shift + space
     awful.key({ modkey,  "Shift"   }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
