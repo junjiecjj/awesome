@@ -797,8 +797,8 @@ globalkeys = gears.table.join(
     -- -- 减少主轴的聚焦窗口数量
     -- awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
     --           {description = "decrease the number of columns", group = "layout"}),
-    --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + space
-    awful.key({ modkey,         }, "space", function () awful.layout.inc( 1)                end,
+    --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + Shift + space
+    awful.key({ modkey,  "Shift"   }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
     --  反向更改桌面布局  mod4 + Control + space
     awful.key({ modkey, "Control"  }, "space", function () awful.layout.inc(-1)                end,
@@ -974,8 +974,8 @@ clientkeys = gears.table.join(
    --  关闭当前窗口  Mod4 + Shift + q
     awful.key({ modkey, "Shift"   }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
-    --  切换当前窗口是否为浮动     Mod4 + Shift + Space
-    awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ,
+    --  切换当前窗口是否为浮动     Mod4 +  Space
+    awful.key({ modkey,           }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     --
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
