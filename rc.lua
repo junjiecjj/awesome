@@ -1102,6 +1102,10 @@ root.keys(globalkeys)
 --==================================   设置规则表 ====================================
 --============================================================================================================
 
+-- 需要自动设置为浮动的程序
+-- 只需要把你想要设置为浮动窗口的程序的Instance或者class按照下面的格式写进去就行
+-- 了。在awesome下用Mod4 + Ctr + i就可以看到当前程序的instance和class名字
+
 
 
 -- {{{ Rules
@@ -1127,7 +1131,7 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    { rule = { class = "Firefox" },
+    { rule = { class = "Firefox", name="Download" },
       properties = { floating = true } },
     -- 这里class通过xprop程序来获取
     { rule = { class = "VirtualBox Manager" },
@@ -1306,31 +1310,6 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
-
-
---==========================================================================================================
---===================================   浮动窗口 ==========================================
---==========================================================================================================
--- 需要自动设置为浮动的程序
--- 只需要把你想要设置为浮动窗口的程序的Instance或者class按照下面的格式写进去就行
--- 了。在awesome下用Mod4 + Ctr + i就可以看到当前程序的instance和class名字
-awful.rules.rules = {
-   -- All clients will match this rule.
-   {rule = {},
-    properties = {border_width = beautiful.border_width,
-                  border_color = beautiful.border_normal,
-                  focus = true,
-                  keys = clientkeys,
-                  buttons = clientbuttons}},
-   {rule = {class = "MPlayer"},
-    properties = {floating = true}},
-   { rule = { class = "pinentry" },
-     properties = { floating = true } },
-   { rule = { class = "gimp" },
-     properties = { floating = true } },
-   {rule = {class = "Firefox", name = "Download"},
-     properties = {floating = true}}
-}
 
 
 
