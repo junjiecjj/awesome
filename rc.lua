@@ -656,7 +656,9 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "h",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
 
-    --
+    --  ==================================================================================================
+    --  ======================  切换桌面快捷键 ==============================
+    --  ==================================================================================================
     --   切换到上一个标签页(桌面，workspace)  Mod4 + Left
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -676,6 +678,12 @@ globalkeys = gears.table.join(
     -- Mod4 + b 快速切换到上一个聚焦的标签页(桌面)
     awful.key({ modkey,           }, "b", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
+    --  ==================================================================================================
+    --  ======================  切换窗口快捷键 ==============================
+    --  ==================================================================================================
+    -- 跳转到紧急窗口
+    --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
+    --          {description = "jump to urgent client", group = "client"}),
 
     -- 切换至下一窗口 Mod4 + j    切换到其它窗口
     awful.key({ modkey,           }, "j",
@@ -750,33 +758,7 @@ globalkeys = gears.table.join(
     -- 将当前窗口与上一窗口互换位置  Mod4 + Shift + k
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
-    --  切换到下一个显示器屏幕  Mod4 + Control + j
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
-    --  切换到上一个显示器屏幕 Mod4 + Control + k
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
-    --  切换到下一个显示器屏幕  Mod4 + ]
-    awful.key({ modkey,           }, "]", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
-    --  切换到上一个显示器屏幕 Mod4 + [
-    awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
 
-    ----
-    --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
-    --          {description = "jump to urgent client", group = "client"}),
-
-    -- Standard program
-    --  打开终端  mod4 + enter
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
-    --  重启awesome  mod4 + ctrl + r
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    -- 退出awesome  mod4 + Control + e
-    awful.key({ modkey, "Control" }, "e", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
     --  增加窗口大小 Mod4 + =  调整当前窗口大小
     awful.key({ modkey,           }, "=",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
@@ -801,8 +783,8 @@ globalkeys = gears.table.join(
     --  反向更改桌面布局  mod4 + Control + space
     awful.key({ modkey, "Control"  }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
-    -- 窗口最小化还原  Mod4 + Ctrl + n
-    awful.key({ modkey, "Control" }, "n",
+    -- 窗口最小化还原  Mod4 + Shift + n
+    awful.key({ modkey, "Shift" }, "n",
               function ()
                   local c = awful.client.restore()
                   -- Focus restored client
@@ -813,6 +795,37 @@ globalkeys = gears.table.join(
                   end
               end,
               {description = "restore minimized", group = "client"}),
+
+
+    --  ==================================================================================================
+    --  ======================  切换显示器快捷键 ==============================
+    --  ==================================================================================================
+
+
+    --  切换到下一个显示器屏幕  Mod4 + Control + j
+    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+              {description = "focus the next screen", group = "screen"}),
+    --  切换到上一个显示器屏幕 Mod4 + Control + k
+    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+              {description = "focus the previous screen", group = "screen"}),
+    --  切换到下一个显示器屏幕  Mod4 + ]
+    awful.key({ modkey,           }, "]", function () awful.screen.focus_relative( 1) end,
+              {description = "focus the next screen", group = "screen"}),
+    --  切换到上一个显示器屏幕 Mod4 + [
+    awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
+              {description = "focus the previous screen", group = "screen"}),
+
+
+    -- Standard program
+    --  打开终端  mod4 + enter
+    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
+              {description = "open a terminal", group = "launcher"}),
+    --  重启awesome  mod4 + ctrl + r
+    awful.key({ modkey, "Control" }, "r", awesome.restart,
+              {description = "reload awesome", group = "awesome"}),
+    -- 退出awesome  mod4 + Control + e
+    awful.key({ modkey, "Control" }, "e", awesome.quit,
+              {description = "quit awesome", group = "awesome"}),
 
     -- Prompt
     ----	mod4 + r  打开程序或命令
