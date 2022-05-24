@@ -910,7 +910,6 @@ globalkeys = gears.table.join(
         end,{description = "mpc on/off", group = "widgets"}),
 
 
-
     -- -- Widgets popups
     -- awful.key({ altkey, }, "p", function () lain.widget.calendar.show(7) end,
     --           {description = "show calendar", group = "widgets"}),
@@ -1030,7 +1029,7 @@ for i = 1, 9 do
                   end,
                   {description = "view tag #"..i, group = "tag"}),
         -- Toggle tag display.
-        --  mod4 + ctrl + num 将另一桌面的内容显示至当前桌面   把当前桌面和1~9桌面是显示
+        --  mod4 + ctrl + num 将另一桌面的内容显示至当前桌面   把当前桌面和1~9桌面一起显示
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
                       local screen = awful.screen.focused()
@@ -1042,7 +1041,7 @@ for i = 1, 9 do
                   {description = "toggle tag #" .. i, group = "tag"}),
 
         -- Move client to tag.
-        -- mod4+shift+1-9  把当前窗口发送到其它工作区   发送客户点到标签tag
+        -- mod4+shift+1-9  把当前窗口发送到其它工作区(桌面)   发送客户点到标签tag
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
@@ -1054,7 +1053,7 @@ for i = 1, 9 do
                   end,
                   {description = "move focused client to tag #"..i, group = "tag"}),
         -- Toggle tag on focused client.
-
+        --
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
