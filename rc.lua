@@ -411,7 +411,7 @@ awful.screen.connect_for_each_screen(function(s)
         buttons = tasklist_buttons,
 
         style = {
-                	border_width = 3,
+                	border_width = 1,
                	border_color = '#000',
             -- shape = gears.shape.powerline
             -- shape = gears.shape.rectangular_tag
@@ -719,7 +719,7 @@ globalkeys = gears.table.join(
         {description = "focus previous by index", group = "client"}
     ),
 
-    --  在两个窗口间切换  Mod4 + Tab
+    --  在两个窗口间切换  Mod4 + Tab, 把win+Tab绑定到切换至前一个聚焦的窗口：
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -728,15 +728,15 @@ globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
-    -- 在两个窗口间切换  alt + tab  把Alt+Tab绑定到切换至前一个窗口：
-    awful.key({ "Mod1", }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
+    -- -- 在两个窗口间切换  alt + tab  把Alt+Tab绑定到切换至前一个窗口：
+    -- awful.key({ "Mod1", }, "Tab",
+    --     function ()
+    --         awful.client.focus.history.previous()
+    --         if client.focus then
+    --             client.focus:raise()
+    --         end
+    --     end,
+    --     {description = "go back", group = "client"}),
     -- 打开菜单 mod4 + u
     awful.key({ modkey,           }, "u", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
@@ -933,7 +933,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "r", function() awful.spawn.with_shell("rofi  -show combi") end,
               {description = "rofi程序启动器", group = "hotkeys"}),
     -- gmrun程序启动器
-    awful.key({ modkey }, "\", function() awful.spawn.with_shell("gmrun") end,
+    awful.key({ modkey }, "\\", function() awful.spawn.with_shell("gmrun") end,
               {description = "gmrun程序启动器", group = "hotkeys"}),
 
     -- goole浏览器
@@ -1222,7 +1222,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = flase }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
