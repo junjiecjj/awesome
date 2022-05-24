@@ -656,7 +656,9 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "h",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
 
-    --
+    --  ==================================================================================================
+    --  ======================  切换桌面快捷键 ==============================
+    --  ==================================================================================================
     --   切换到上一个标签页(桌面，workspace)  Mod4 + Left
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -676,6 +678,12 @@ globalkeys = gears.table.join(
     -- Mod4 + b 快速切换到上一个聚焦的标签页(桌面)
     awful.key({ modkey,           }, "b", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
+    --  ==================================================================================================
+    --  ======================  切换窗口快捷键 ==============================
+    --  ==================================================================================================
+    -- 跳转到紧急窗口
+    --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
+    --          {description = "jump to urgent client", group = "client"}),
 
     -- 切换至下一窗口 Mod4 + j    切换到其它窗口
     awful.key({ modkey,           }, "j",
@@ -750,33 +758,7 @@ globalkeys = gears.table.join(
     -- 将当前窗口与上一窗口互换位置  Mod4 + Shift + k
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
-    --  切换到下一个显示器屏幕  Mod4 + Control + j
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
-    --  切换到上一个显示器屏幕 Mod4 + Control + k
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
-    --  切换到下一个显示器屏幕  Mod4 + ]
-    awful.key({ modkey,           }, "]", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
-    --  切换到上一个显示器屏幕 Mod4 + [
-    awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
 
-    ----
-    --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
-    --          {description = "jump to urgent client", group = "client"}),
-
-    -- Standard program
-    --  打开终端  mod4 + enter
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
-    --  重启awesome  mod4 + ctrl + r
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    -- 退出awesome  mod4 + Control + e
-    awful.key({ modkey, "Control" }, "e", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
     --  增加窗口大小 Mod4 + =  调整当前窗口大小
     awful.key({ modkey,           }, "=",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
@@ -801,8 +783,8 @@ globalkeys = gears.table.join(
     --  反向更改桌面布局  mod4 + Control + space
     awful.key({ modkey, "Control"  }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
-    -- 窗口最小化还原  Mod4 + Ctrl + n
-    awful.key({ modkey, "Control" }, "n",
+    -- 窗口最小化还原  Mod4 + Shift + n
+    awful.key({ modkey, "Shift" }, "n",
               function ()
                   local c = awful.client.restore()
                   -- Focus restored client
@@ -813,6 +795,37 @@ globalkeys = gears.table.join(
                   end
               end,
               {description = "restore minimized", group = "client"}),
+
+
+    --  ==================================================================================================
+    --  ======================  切换显示器快捷键 ==============================
+    --  ==================================================================================================
+
+
+    --  切换到下一个显示器屏幕  Mod4 + Control + j
+    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+              {description = "focus the next screen", group = "screen"}),
+    --  切换到上一个显示器屏幕 Mod4 + Control + k
+    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+              {description = "focus the previous screen", group = "screen"}),
+    --  切换到下一个显示器屏幕  Mod4 + ]
+    awful.key({ modkey,           }, "]", function () awful.screen.focus_relative( 1) end,
+              {description = "focus the next screen", group = "screen"}),
+    --  切换到上一个显示器屏幕 Mod4 + [
+    awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
+              {description = "focus the previous screen", group = "screen"}),
+
+
+    -- Standard program
+    --  打开终端  mod4 + enter
+    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
+              {description = "open a terminal", group = "launcher"}),
+    --  重启awesome  mod4 + ctrl + r
+    awful.key({ modkey, "Control" }, "r", awesome.restart,
+              {description = "reload awesome", group = "awesome"}),
+    -- 退出awesome  mod4 + Control + e
+    awful.key({ modkey, "Control" }, "e", awesome.quit,
+              {description = "quit awesome", group = "awesome"}),
 
     -- Prompt
     ----	mod4 + r  打开程序或命令
@@ -839,16 +852,16 @@ globalkeys = gears.table.join(
 
     -- 亮度/音量快捷键
     awful.key({}, "XF86MonBrightnessUp", function() os.execute("xbacklight -inc 5") end,
-              {description = "+5%", group = "hotkeys"}),
+              {description = "+5%", group = "custom"}),
     awful.key({}, "XF86MonBrightnessDown", function() os.execute("xbacklight -dec 5") end,
-              {description = "-5%", group = "hotkeys"}),
+              {description = "-5%", group = "custom"}),
 
     awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
-              {description = "volume up", group = "hotkeys"}),
+              {description = "volume up", group = "custom"}),
     awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
-              {description = "volume down", group = "hotkeys"}),
+              {description = "volume down", group = "custom"}),
     awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
-              {description = "toggle mute", group = "hotkeys"}),
+              {description = "toggle mute", group = "custom"}),
 
     -- -- ALSA volume control
     -- awful.key({  }, "XF86AudioRaiseVolume",
@@ -923,37 +936,35 @@ globalkeys = gears.table.join(
 
     -- 截图快捷键
     awful.key({}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ") end,
-              {description = "take a screenshot", group = "hotkeys"}),
+              {description = "take a screenshot", group = "custom"}),
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
-              {description = "open file manager", group = "hotkeys"}),
+              {description = "open file manager", group = "custom"}),
     -- dmenu程序启动器
     awful.key({ modkey }, "d", function() awful.spawn.with_shell("dmenu_run") end,
-              {description = "dmenu程序启动器", group = "hotkeys"}),
+              {description = "dmenu程序启动器", group = "custom"}),
     -- rofi程序启动器
     awful.key({ modkey }, "r", function() awful.spawn.with_shell("rofi  -show combi") end,
-              {description = "rofi程序启动器", group = "hotkeys"}),
+              {description = "rofi程序启动器", group = "custom"}),
     -- gmrun程序启动器
     awful.key({ modkey }, "\\", function() awful.spawn.with_shell("gmrun") end,
-              {description = "gmrun程序启动器", group = "hotkeys"}),
+              {description = "gmrun程序启动器", group = "custom"}),
 
     -- goole浏览器
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
-              {description = "google  Browser", group = "hotkeys"}),
+              {description = "google  Browser", group = "custom"}),
     -- slock锁屏
     awful.key({ modkey, "Mod1" }, "l", function() awful.spawn.with_shell("slock") end,
-              {description = "slock锁屏", group = "hotkeys"}),
+              {description = "slock锁屏", group = "custom"}),
     -- xscreensaver锁屏
     awful.key({ modkey, "Mod1" }, "x", function() awful.spawn.with_shell("xscreensaver-command -lock") end,
-              {description = "xscreensaver锁屏", group = "hotkeys"}),
+              {description = "xscreensaver锁屏", group = "custom"}),
     -- betterlockscreen锁屏
     awful.key({ modkey, "Mod1" }, "b", function() awful.spawn.with_shell("betterlockscreen -l") end,
-              {description = "betterlockscreen锁屏", group = "hotkeys"}),
+              {description = "betterlockscreen锁屏", group = "custom"}),
     --  feh更换壁纸
     awful.key({ modkey, "Control" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
-              {description = "betterlockscreen锁屏", group = "hotkeys"})
-
-
+              {description = "betterlockscreen锁屏", group = "custom"})
 
 )
 

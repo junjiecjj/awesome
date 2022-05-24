@@ -852,16 +852,16 @@ globalkeys = gears.table.join(
 
     -- 亮度/音量快捷键
     awful.key({}, "XF86MonBrightnessUp", function() os.execute("xbacklight -inc 5") end,
-              {description = "+5%", group = "hotkeys"}),
+              {description = "+5%", group = "custom"}),
     awful.key({}, "XF86MonBrightnessDown", function() os.execute("xbacklight -dec 5") end,
-              {description = "-5%", group = "hotkeys"}),
+              {description = "-5%", group = "custom"}),
 
     awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
-              {description = "volume up", group = "hotkeys"}),
+              {description = "volume up", group = "custom"}),
     awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
-              {description = "volume down", group = "hotkeys"}),
+              {description = "volume down", group = "custom"}),
     awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
-              {description = "toggle mute", group = "hotkeys"}),
+              {description = "toggle mute", group = "custom"}),
 
     -- -- ALSA volume control
     -- awful.key({  }, "XF86AudioRaiseVolume",
@@ -936,37 +936,35 @@ globalkeys = gears.table.join(
 
     -- 截图快捷键
     awful.key({}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ") end,
-              {description = "take a screenshot", group = "hotkeys"}),
+              {description = "take a screenshot", group = "custom"}),
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
-              {description = "open file manager", group = "hotkeys"}),
+              {description = "open file manager", group = "custom"}),
     -- dmenu程序启动器
     awful.key({ modkey }, "d", function() awful.spawn.with_shell("dmenu_run") end,
-              {description = "dmenu程序启动器", group = "hotkeys"}),
+              {description = "dmenu程序启动器", group = "custom"}),
     -- rofi程序启动器
     awful.key({ modkey }, "r", function() awful.spawn.with_shell("rofi  -show combi") end,
-              {description = "rofi程序启动器", group = "hotkeys"}),
+              {description = "rofi程序启动器", group = "custom"}),
     -- gmrun程序启动器
     awful.key({ modkey }, "\\", function() awful.spawn.with_shell("gmrun") end,
-              {description = "gmrun程序启动器", group = "hotkeys"}),
+              {description = "gmrun程序启动器", group = "custom"}),
 
     -- goole浏览器
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
-              {description = "google  Browser", group = "hotkeys"}),
+              {description = "google  Browser", group = "custom"}),
     -- slock锁屏
     awful.key({ modkey, "Mod1" }, "l", function() awful.spawn.with_shell("slock") end,
-              {description = "slock锁屏", group = "hotkeys"}),
+              {description = "slock锁屏", group = "custom"}),
     -- xscreensaver锁屏
     awful.key({ modkey, "Mod1" }, "x", function() awful.spawn.with_shell("xscreensaver-command -lock") end,
-              {description = "xscreensaver锁屏", group = "hotkeys"}),
+              {description = "xscreensaver锁屏", group = "custom"}),
     -- betterlockscreen锁屏
     awful.key({ modkey, "Mod1" }, "b", function() awful.spawn.with_shell("betterlockscreen -l") end,
-              {description = "betterlockscreen锁屏", group = "hotkeys"}),
+              {description = "betterlockscreen锁屏", group = "custom"}),
     --  feh更换壁纸
     awful.key({ modkey, "Control" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
-              {description = "betterlockscreen锁屏", group = "hotkeys"})
-
-
+              {description = "betterlockscreen锁屏", group = "custom"})
 
 )
 
