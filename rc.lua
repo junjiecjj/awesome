@@ -655,23 +655,23 @@ globalkeys = gears.table.join(
     -- 打开所有的快捷键命令列表
     awful.key({ modkey,           }, "h",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-    --  查看前一个tag  切换标签  Mod4 + Left
+    --   切换到上一个标签页(桌面，workspace)  Mod4 + Left
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
-    --  查看后一个tag   Mod4 + Right
+    --   切换到下一个标签页(桌面，workspace)  Mod4 + Right
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
-    --  查看前一个tag  切换标签  Mod4 + ;
+    --   切换到上一个标签页(桌面，workspace) 切换标签  Mod4 + ;
     awful.key({ modkey,           }, ";",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
-    --  查看后一个tag   Mod4 + '
+    --   切换到下一个标签页(桌面，workspace)  Mod4 + '
     awful.key({ modkey,           }, "'",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
 
-    -- Mod4 + Esc 快速切换到上一个桌面
+    -- Mod4 + Esc 快速切换到上一个聚焦的标签页(桌面)
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
-    -- Mod4 + b 快速切换到上一个桌面
+    -- Mod4 + b 快速切换到上一个聚焦的标签页(桌面)
     awful.key({ modkey,           }, "b", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
@@ -775,10 +775,10 @@ globalkeys = gears.table.join(
     -- 退出awesome  mod4 + Control + e
     awful.key({ modkey, "Control" }, "e", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
-    --  Mod4 + l增加窗口大小   调整当前窗口大小
+    --  增加窗口大小 Mod4 + =  调整当前窗口大小
     awful.key({ modkey,           }, "=",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
-    -- 减小窗口大小 Mod4 + h
+    --  减小窗口大小 Mod4 + -
     awful.key({ modkey,           }, "-",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
     --  减少主窗口个数 Mod4 + Shift + h
@@ -875,7 +875,7 @@ globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "mpc play" ) end),
     awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "mpc pause" ) end),
 
-    -- MPD control
+    -- 音乐控制，MPD control
     awful.key({ altkey, "Control" }, "Up",
         function ()
             awful.spawn.with_shell("mpc toggle")
@@ -1222,7 +1222,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = flase }
+      }, properties = { titlebars_enabled = true }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
