@@ -996,7 +996,7 @@ clientkeys = gears.table.join(
     --  切换当前窗口是否为浮动     Mod4 +  Space
     awful.key({ modkey,           }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
-    -- 将当前窗口提升为主窗口，单向
+    -- 将当前窗口提升为主窗口，将当前窗口与主窗口互换，单向
     awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
 
