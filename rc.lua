@@ -635,7 +635,7 @@ run_once({"gnome-settings-daemon"})
 
 
 -- 方法三： 执行自启动脚本
--- awful.spawn.with_shell("~/.config/awesome/autostart.sh &")
+-- awful.spawn.with_shell("~/.config/awesome/autostart_cjj.sh &")
 
 --============================================================================================================
 --==================================   设置快捷键 ====================================
