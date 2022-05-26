@@ -614,28 +614,28 @@ end
 -- end
 
 
-run_once({"kbdd"})
-run_once({"redshift-gtk &"})
-run_once({"blueman-applet &"})
-run_once({"nm-applet &"})
-run_once({"xscreensaver  -no-splash &"})
-run_once({ "picom --experimental-backends -b"})
-run_once({"feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"})
-run_once({"nohup  flameshot >/dev/null 2>&1 &"  })
-run_once({"dunst &"})
-run_once({"fcitx &"})
-run_once({"fcitx5 &"})
-run_once({"nohup pasystray  >/dev/null 2>&1 &"})
-run_once({"nohup kmix   >/dev/null 2>&1 &"})
-run_once({"nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"})
-run_once({"nohup mictray   >/dev/null 2>&1 &"})
-run_once({"gnome-settings-daemon"})
+-- run_once({"kbdd"})
+-- run_once({"redshift-gtk &"})
+-- run_once({"blueman-applet &"})
+-- run_once({"nm-applet &"})
+-- run_once({"xscreensaver  -no-splash &"})
+-- run_once({ "picom --experimental-backends -b"})
+-- run_once({"feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"})
+-- run_once({"nohup  flameshot >/dev/null 2>&1 &"  })
+-- run_once({"dunst &"})
+-- run_once({"fcitx &"})
+-- run_once({"fcitx5 &"})
+-- run_once({"nohup pasystray  >/dev/null 2>&1 &"})
+-- run_once({"nohup kmix   >/dev/null 2>&1 &"})
+-- run_once({"nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"})
+-- run_once({"nohup mictray   >/dev/null 2>&1 &"})
+-- run_once({"gnome-settings-daemon"})
 
 
 
 
 -- 方法三： 执行自启动脚本
--- awful.spawn.with_shell("~/.config/awesome/autostart_cjj.sh &")
+awful.spawn.with_shell("bash ~/.config/awesome/autostart_cjj.sh &")
 
 --============================================================================================================
 --==================================   设置快捷键 ====================================
