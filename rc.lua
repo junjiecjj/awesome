@@ -874,6 +874,25 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
               {description = "toggle mute", group = "custom"}),
 
+    awful.key({modkey, "Shift" }, "+", function() os.execute("amixer set Master 5%+") end,
+              {description = "volume up", group = "custom"}),
+    awful.key({modkey, "Shift" }, "-", function() os.execute("amixer set Master 5%-") end,
+              {description = "volume down", group = "custom"}),
+    awful.key({modkey, "Shift" }, "Backspace", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+              {description = "toggle mute", group = "custom"}),
+
+    awful.key({modkey, "Control" }, "+", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
+              {description = "volume up", group = "custom"}),
+    awful.key({modkey, "Control" }, "-", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
+              {description = "volume down", group = "custom"}),
+    awful.key({modkey, "Control" }, "Backspace", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
+              {description = "toggle mute", group = "custom"}),
+
+
+
+
+
+
     -- -- ALSA volume control
     -- awful.key({  }, "XF86AudioRaiseVolume",
     --     function ()
@@ -892,14 +911,20 @@ globalkeys = gears.table.join(
     --     end,{description = "toggle mute", group = "hotkeys"}),
 
 
-    awful.key({ modkey, "Control"}, "+", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
-    awful.key({ modkey, "Control"}, "-", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
+    awful.key({ modkey, altkey}, "+", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
+    awful.key({ modkey, altkey}, "-", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
 
 
     awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "mpc next" ) end),
     awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "mpc prev" ) end),
     awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "mpc play" ) end),
     awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "mpc pause" ) end),
+
+    -- awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "playerctl next" ) end),
+    -- awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "playerctl prev" ) end),
+    -- awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "playerctl play" ) end),
+    -- awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "playerctl pause" ) end),
+
 
     -- 音乐控制，MPD control
     awful.key({ altkey, "Control" }, "Up",
