@@ -663,7 +663,7 @@ globalkeys = gears.table.join(
     --  ==================================================================================================
     --  ======================  切换桌面快捷键 ==============================
     --  ==================================================================================================
-    --   切换到上一个标签页(桌面，workspace)  Mod4 + Left
+    --  依次顺序切换到上一个标签页(桌面，workspace)  Mod4 + Left
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
     --   切换到下一个标签页(桌面，workspace)  Mod4 + Right
@@ -677,7 +677,11 @@ globalkeys = gears.table.join(
               {description = "view next", group = "tag"}),
 
     -- Mod4 + Esc 快速切换到上一个聚焦的标签页(桌面)
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
+    -- awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
+    --           {description = "go back", group = "tag"}),
+    -- awful.key({ modkey,           }, "Tab", awful.tag.history.restore,
+    --           {description = "go back", group = "tag"}),
+    awful.key({ modkey,           }, "`", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
     -- Mod4 + b 快速切换到上一个聚焦的标签页(桌面)
     awful.key({ modkey,           }, "b", awful.tag.history.restore,
@@ -831,6 +835,9 @@ globalkeys = gears.table.join(
     --  打开终端  mod4 + enter
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
+    awful.key({ modkey,           }, "x", function () awful.spawn("xterm") end,
+              {description = "open a terminal", group = "launcher"}),
+
     --  重启awesome  mod4 + ctrl + r
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
@@ -867,28 +874,35 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86MonBrightnessDown", function() os.execute("xbacklight -dec 5") end,
               {description = "-5%", group = "custom"}),
 
-    awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
+    -- amixer useless here
+    -- awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
+    --           {description = "volume up", group = "custom"}),
+    -- awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
+    --           {description = "volume down", group = "custom"}),
+    -- awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+    --           {description = "toggle mute", group = "custom"}),
+
+    awful.key({}, "XF86AudioRaiseVolume", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
               {description = "volume up", group = "custom"}),
-    awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
+    awful.key({}, "XF86AudioLowerVolume", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
               {description = "volume down", group = "custom"}),
-    awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+    awful.key({}, "XF86AudioMute", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
               {description = "toggle mute", group = "custom"}),
 
-    awful.key({modkey, "Shift" }, "+", function() os.execute("amixer set Master 5%+") end,
+
+    awful.key({modkey, "Shift" }, "=", function() os.execute("amixer set Master 5%+") end,
               {description = "volume up", group = "custom"}),
     awful.key({modkey, "Shift" }, "-", function() os.execute("amixer set Master 5%-") end,
               {description = "volume down", group = "custom"}),
-    awful.key({modkey, "Shift" }, "Backspace", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+    awful.key({modkey, "Shift" }, "BackSpace", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
               {description = "toggle mute", group = "custom"}),
 
-    awful.key({modkey, "Control" }, "+", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
+    awful.key({modkey, "Control" }, "=", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
               {description = "volume up", group = "custom"}),
     awful.key({modkey, "Control" }, "-", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
               {description = "volume down", group = "custom"}),
-    awful.key({modkey, "Control" }, "Backspace", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
+    awful.key({modkey, "Control" }, "BackSpace", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
               {description = "toggle mute", group = "custom"}),
-
-
 
 
 
@@ -922,7 +936,7 @@ globalkeys = gears.table.join(
 
     -- awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "playerctl next" ) end),
     -- awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "playerctl prev" ) end),
-    -- awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "playerctl play" ) end),
+    -- awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "playerctl play-pause" ) end),
     -- awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "playerctl pause" ) end),
 
 
@@ -971,8 +985,22 @@ globalkeys = gears.table.join(
 
 
     -- 截图快捷键
-    awful.key({}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ") end,
+    awful.key({"Shift"}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ;exec notify-send '火焰截图 无延时 自己选择截图区域 保存在~/图片'") end,
               {description = "take a screenshot", group = "custom"}),
+
+    awful.key({"Control"}, "Print", function() awful.spawn.with_shell("flameshot full -c -p  $(xdg-user-dir PICTURES)  -d 2000 ;exec notify-send '火焰截图 捕获全屏（无GUI）并保存到剪贴板和路径~/图片 延迟2秒'") end,
+              {description = "take a screenshot", group = "custom"}),
+
+    awful.key({modkey,"Shift"}, "Print", function() awful.spawn.with_shell("deepin-screenshot;exec notify-send '深度截图' ") end,
+              {description = "take a screenshot", group = "custom"}),
+
+
+    awful.key({}, "Print", function() awful.spawn.with_shell("scrot -cd 3 $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f; viewnior $f';exec notify-send 'Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看'") end,
+              {description = "take a screenshot", group = "custom"}),
+
+    awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 打开查看'") end,
+              {description = "take a screenshot", group = "custom"}),
+
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
               {description = "open file manager", group = "custom"}),

@@ -70,6 +70,10 @@ require("awful.hotkeys_popup.keys")
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+-- 多显示器
+local xrandr = require("xrandr")
+
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -610,28 +614,28 @@ end
 -- end
 
 
-run_once({"kbdd"})
-run_once({"redshift-gtk &"})
-run_once({"blueman-applet &"})
-run_once({"nm-applet &"})
-run_once({"xscreensaver  -no-splash &"})
-run_once({ "picom --experimental-backends -b"})
-run_once({"feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"})
-run_once({"nohup  flameshot >/dev/null 2>&1 &"  })
-run_once({"dunst &"})
-run_once({"fcitx &"})
-run_once({"fcitx5 &"})
-run_once({"nohup pasystray  >/dev/null 2>&1 &"})
-run_once({"nohup kmix   >/dev/null 2>&1 &"})
-run_once({"nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"})
-run_once({"nohup mictray   >/dev/null 2>&1 &"})
-run_once({"gnome-settings-daemon"})
+-- run_once({"kbdd"})
+-- run_once({"redshift-gtk &"})
+-- run_once({"blueman-applet &"})
+-- run_once({"nm-applet &"})
+-- run_once({"xscreensaver  -no-splash &"})
+-- run_once({ "picom --experimental-backends -b"})
+-- run_once({"feh --recursive --randomize --bg-fill /home/jack/图片/Wallpapers/"})
+-- run_once({"nohup  flameshot >/dev/null 2>&1 &"  })
+-- run_once({"dunst &"})
+-- run_once({"fcitx &"})
+-- run_once({"fcitx5 &"})
+-- run_once({"nohup pasystray  >/dev/null 2>&1 &"})
+-- run_once({"nohup kmix   >/dev/null 2>&1 &"})
+-- run_once({"nohup /foo/bar/bin/pa-applet   >/dev/null 2>&1 &"})
+-- run_once({"nohup mictray   >/dev/null 2>&1 &"})
+-- run_once({"gnome-settings-daemon"})
 
 
 
 
 -- 方法三： 执行自启动脚本
--- awful.spawn.with_shell("~/.config/awesome/autostart.sh &")
+awful.spawn.with_shell("bash ~/.config/awesome/autostart_cjj.sh &")
 
 --============================================================================================================
 --==================================   设置快捷键 ====================================
@@ -659,7 +663,7 @@ globalkeys = gears.table.join(
     --  ==================================================================================================
     --  ======================  切换桌面快捷键 ==============================
     --  ==================================================================================================
-    --   切换到上一个标签页(桌面，workspace)  Mod4 + Left
+    --  依次顺序切换到上一个标签页(桌面，workspace)  Mod4 + Left
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
     --   切换到下一个标签页(桌面，workspace)  Mod4 + Right
@@ -673,7 +677,11 @@ globalkeys = gears.table.join(
               {description = "view next", group = "tag"}),
 
     -- Mod4 + Esc 快速切换到上一个聚焦的标签页(桌面)
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
+    -- awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
+    --           {description = "go back", group = "tag"}),
+    -- awful.key({ modkey,           }, "Tab", awful.tag.history.restore,
+    --           {description = "go back", group = "tag"}),
+    awful.key({ modkey,           }, "`", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
     -- Mod4 + b 快速切换到上一个聚焦的标签页(桌面)
     awful.key({ modkey,           }, "b", awful.tag.history.restore,
@@ -765,16 +773,16 @@ globalkeys = gears.table.join(
     --  减小窗口大小 Mod4 + -
     awful.key({ modkey,           }, "-",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
-    --  减少主窗口个数 Mod4 + Shift + h
+    --  减少主窗口个数 Mod4 + Shift + h, 增加一个主视窗区
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
-    --  增加主窗口个数 Mod4 + Shift + l
+    --  增加主窗口个数 Mod4 + Shift + l, 减少一个主视窗区
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
-    -- 增加主轴的聚焦窗口数量
+    -- 增加主轴的聚焦窗口数量, 增加一个非主视窗区的column数
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
-    -- 减少主轴的聚焦窗口数量
+    -- 减少主轴的聚焦窗口数量, 减少一个非主视窗区的column数
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
     --   切换窗口布局  比如水平布局下，新开窗口与原窗口水平分割桌面  mod4 + Shift + space
@@ -802,7 +810,7 @@ globalkeys = gears.table.join(
     --  ==================================================================================================
 
 
-    --  切换到下一个显示器屏幕  Mod4 + Control + j
+    --  切换到下一个显示器屏幕  Mod4 + Control + j   切换不同的screen,聚焦下一个屏幕, 这会将您的光标从一个屏幕移动到另一个屏幕。它将焦点从一个屏幕上的客户端窗口更改为下一个屏幕上的客户端窗口。
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
     --  切换到上一个显示器屏幕 Mod4 + Control + k
@@ -814,12 +822,22 @@ globalkeys = gears.table.join(
     --  切换到上一个显示器屏幕 Mod4 + [
     awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
-
+    --  https://awesomewm.org/recipes/xrandr/
+    --Pressing this key binding will open a popup with a possible screen arrangement. Pressing the key again will replace this popup with the next possibility, eventually arriving at "keep the current configuration".
+    -- If the key is not pressed again within four seconds, the configuration described in the current popup is applied.
+    awful.key({modkey,  "Mod1"   }, "s", function() xrandr.xrandr() end),
+    awful.key({ modkey, "Mod1" }, "m", function() xrandr.switch(2) end),
+    --  ==================================================================================================
+    --  ======================  自定义的 APP快捷键 ==============================
+    --  ==================================================================================================
 
     -- Standard program
     --  打开终端  mod4 + enter
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
+    awful.key({ modkey,           }, "x", function () awful.spawn("xterm") end,
+              {description = "open a terminal", group = "launcher"}),
+
     --  重启awesome  mod4 + ctrl + r
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
@@ -856,12 +874,38 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86MonBrightnessDown", function() os.execute("xbacklight -dec 5") end,
               {description = "-5%", group = "custom"}),
 
-    awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
+    -- amixer useless here
+    -- awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
+    --           {description = "volume up", group = "custom"}),
+    -- awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
+    --           {description = "volume down", group = "custom"}),
+    -- awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+    --           {description = "toggle mute", group = "custom"}),
+
+    awful.key({}, "XF86AudioRaiseVolume", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
               {description = "volume up", group = "custom"}),
-    awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
+    awful.key({}, "XF86AudioLowerVolume", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
               {description = "volume down", group = "custom"}),
-    awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+    awful.key({}, "XF86AudioMute", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
               {description = "toggle mute", group = "custom"}),
+
+
+    awful.key({modkey, "Shift" }, "=", function() os.execute("amixer set Master 5%+") end,
+              {description = "volume up", group = "custom"}),
+    awful.key({modkey, "Shift" }, "-", function() os.execute("amixer set Master 5%-") end,
+              {description = "volume down", group = "custom"}),
+    awful.key({modkey, "Shift" }, "BackSpace", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
+              {description = "toggle mute", group = "custom"}),
+
+    awful.key({modkey, "Control" }, "=", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
+              {description = "volume up", group = "custom"}),
+    awful.key({modkey, "Control" }, "-", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
+              {description = "volume down", group = "custom"}),
+    awful.key({modkey, "Control" }, "BackSpace", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
+              {description = "toggle mute", group = "custom"}),
+
+
+
 
     -- -- ALSA volume control
     -- awful.key({  }, "XF86AudioRaiseVolume",
@@ -881,14 +925,20 @@ globalkeys = gears.table.join(
     --     end,{description = "toggle mute", group = "hotkeys"}),
 
 
-    awful.key({ modkey, "Control"}, "+", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
-    awful.key({ modkey, "Control"}, "-", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
+    awful.key({ modkey, altkey}, "+", function () brightness_widget:inc() end, {description = "increase brightness", group = "custom"}),
+    awful.key({ modkey, altkey}, "-", function () brightness_widget:dec() end, {description = "decrease brightness", group = "custom"}),
 
 
     awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "mpc next" ) end),
     awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "mpc prev" ) end),
     awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "mpc play" ) end),
     awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "mpc pause" ) end),
+
+    -- awful.key({ }, "XF86AudioNext",function () awful.util.spawn( "playerctl next" ) end),
+    -- awful.key({ }, "XF86AudioPrev",function () awful.util.spawn( "playerctl prev" ) end),
+    -- awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "playerctl play-pause" ) end),
+    -- awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "playerctl pause" ) end),
+
 
     -- 音乐控制，MPD control
     awful.key({ altkey, "Control" }, "Up",
@@ -935,8 +985,22 @@ globalkeys = gears.table.join(
 
 
     -- 截图快捷键
-    awful.key({}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ") end,
+    awful.key({"Shift"}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ;exec notify-send '火焰截图 无延时 自己选择截图区域 保存在~/图片'") end,
               {description = "take a screenshot", group = "custom"}),
+
+    awful.key({"Control"}, "Print", function() awful.spawn.with_shell("flameshot full -c -p  $(xdg-user-dir PICTURES)  -d 2000 ;exec notify-send '火焰截图 捕获全屏（无GUI）并保存到剪贴板和路径~/图片 延迟2秒'") end,
+              {description = "take a screenshot", group = "custom"}),
+
+    awful.key({modkey,"Shift"}, "Print", function() awful.spawn.with_shell("deepin-screenshot;exec notify-send '深度截图' ") end,
+              {description = "take a screenshot", group = "custom"}),
+
+
+    awful.key({}, "Print", function() awful.spawn.with_shell("scrot -cd 3 $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f; viewnior $f';exec notify-send 'Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看'") end,
+              {description = "take a screenshot", group = "custom"}),
+
+    awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 打开查看'") end,
+              {description = "take a screenshot", group = "custom"}),
+
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
               {description = "open file manager", group = "custom"}),
@@ -985,16 +1049,49 @@ clientkeys = gears.table.join(
     --  切换当前窗口是否为浮动     Mod4 +  Space
     awful.key({ modkey,           }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
-    -- 将当前窗口提升为主窗口，单向
+    -- 将当前窗口提升为主窗口，将当前窗口与主窗口互换，单向
     awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
 
+    --  ==================================================================================================
+    --  ======================  窗口在显示器间切换快捷键 ==============================
+    --  ==================================================================================================
+
+    -- 把当前程序发送到下一个显示器中, 通过 modkey + o 快捷键可以发送 window 窗口到另一个显示器，并聚焦于另一个显示器。
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
+    -- 将窗口移动到另一个屏幕并且保持焦点在当前屏幕
+    awful.key({ modkey, "Shift" }, "o", function (c) c:
+          move_to_screen()
+          awful.screen.focus_relative(-1)
+        end, {description = "move to other screen without move focus", group = "client"}),
+
+    -- 将当前窗口移动到上一个显示器,聚焦于上一个显示器
+    awful.key({ modkey, "Control"  }, "[",
+              function (c)
+                  c:move_to_screen((awful.screen.focused().index - 1) % 3)
+              end, {description = "move to previous screen", group = "client"}),
+    -- 将当前窗口移动到下一个显示器,聚焦于下一个显示器
+    awful.key({ modkey, "Control"  }, "]",
+              function (c)
+                  c:move_to_screen((awful.screen.focused().index + 1) % 3)
+              end, {description = "move to previous screen", group = "client"}),
+    -- 将当前窗口移动到上一个显示器,但聚焦于当前显示器
+    awful.key({ modkey, "Shift"   }, "[",  function (c) c:
+            move_to_screen((awful.screen.focused().index - 1) % 3)
+            awful.screen.focus_relative(1)
+        end, {description = "move to previous screen", group = "client"}),
+    -- 将当前窗口移动到下一个显示器,但聚焦于当前显示器
+    awful.key({ modkey, "Shift"   }, "]", function (c) c:
+                  move_to_screen((awful.screen.focused().index + 1) % 3)
+                  awful.screen.focus_relative(-1)
+              end, {description = "move to previous screen", group = "client"}),
+
+
     --  标记窗口（可标记多个）Mod4 + Shift + t
     awful.key({ modkey,   "Shift" }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
-    --  窗口最小化	Mod4 + n
+    --  窗口最小化  Mod4 + n
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
@@ -1002,7 +1099,7 @@ clientkeys = gears.table.join(
             c.minimized = true
         end ,
         {description = "minimize", group = "client"}),
-    -- 窗口最大化  Mod4+m
+    -- 窗口最大化,退出最大化  Mod4+m
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized = not c.maximized
@@ -1065,8 +1162,11 @@ for i = 1, 9 do
                      end
                   end,
                   {description = "move focused client to tag #"..i, group = "tag"}),
+
+
+
         -- Toggle tag on focused client.
-        --
+        -- 将当前窗口复制一份到指定标签页tag
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
@@ -1319,6 +1419,23 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
+--  https://www.chengweiyang.cn/2018/04/28/awesome-multi-monitor-2/
+--当只使用一个 screen 的时候，切换 screen 的时候，所有窗口和 systray 自动发送到另一个 screen 去，且保持布局不变。
+tag.connect_signal("request::screen", function(t)
+    for s in screen do
+        if s ~= t.screen then
+            local t2 = awful.tag.find_by_name(s, t.name)
+            if t2 then
+                t:swap(t2)
+            else
+                t.screen = s
+            end
+            return
+        end
+    end
+end)
+
 -- }}}
 
 
