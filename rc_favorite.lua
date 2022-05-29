@@ -791,10 +791,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
     -- 增加主轴的聚焦窗口数量, 增加一个非主视窗区的column数
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+    awful.key({ modkey, "Mod1" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
     -- 减少主轴的聚焦窗口数量, 减少一个非主视窗区的column数
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
+    awful.key({ modkey, "Mod1" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
 
     --  ==================================================================================
@@ -1026,18 +1026,18 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
               {description = "google  Browser", group = "custom"}),
     -- slock锁屏
-    awful.key({ modkey, "Mod1" }, "l", function() awful.spawn.with_shell("slock") end,
+    awful.key({ modkey, "Control" }, "l", function() awful.spawn.with_shell("slock") end,
               {description = "slock锁屏", group = "custom"}),
     -- xscreensaver锁屏
-    awful.key({ modkey, "Mod1" }, "x", function() awful.spawn.with_shell("xscreensaver-command -lock") end,
+    awful.key({ modkey, "Control" }, "x", function() awful.spawn.with_shell("xscreensaver-command -lock") end,
               {description = "xscreensaver锁屏", group = "custom"}),
     -- betterlockscreen锁屏
-    awful.key({ modkey, "Mod1" }, "b", function() awful.spawn.with_shell("betterlockscreen -l") end,
+    awful.key({ modkey, "Control" }, "b", function() awful.spawn.with_shell("betterlockscreen -l") end,
               {description = "betterlockscreen锁屏", group = "custom"}),
     -- awful.key({ modkey, "Mod1" }, "Escape", function() awful.spawn.with_shell("bash ~/.config/awesome/script/dmenu-logout.sh") end,
     --           {description = "betterlockscreen锁屏", group = "custom"}),
     --  feh更换壁纸
-    awful.key({ modkey, "Control" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
+    awful.key({ modkey, "Shift" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
               {description = "betterlockscreen锁屏", group = "custom"})
 
 )
