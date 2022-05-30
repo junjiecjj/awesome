@@ -883,9 +883,9 @@ globalkeys = gears.table.join(
               {description = "-5%", group = "custom"}),
 
     -- amixer useless here
-    -- awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master 5%+") end,
+    -- awful.key({}, "XF86AudioRaiseVolume", function() os.execute("amixer set Master '5%+'") end,
     --           {description = "volume up", group = "custom"}),
-    -- awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master 5%-") end,
+    -- awful.key({}, "XF86AudioLowerVolume", function() os.execute("amixer set Master '5%-'") end,
     --           {description = "volume down", group = "custom"}),
     -- awful.key({}, "XF86AudioMute", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
     --           {description = "toggle mute", group = "custom"}),
@@ -898,9 +898,9 @@ globalkeys = gears.table.join(
               {description = "toggle mute", group = "custom"}),
 
 
-    awful.key({modkey, "Shift" }, "=", function() os.execute("amixer set Master 5%+") end,
+    awful.key({modkey, "Shift" }, "=", function() os.execute("amixer set Master '5%+'") end,
               {description = "volume up", group = "custom"}),
-    awful.key({modkey, "Shift" }, "-", function() os.execute("amixer set Master 5%-") end,
+    awful.key({modkey, "Shift" }, "-", function() os.execute("amixer set Master '5%-'") end,
               {description = "volume down", group = "custom"}),
     awful.key({modkey, "Shift" }, "BackSpace", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
               {description = "toggle mute", group = "custom"}),
