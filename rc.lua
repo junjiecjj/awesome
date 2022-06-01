@@ -1026,7 +1026,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "g", function() awful.spawn.with_shell("google-chrome-stable") end,
               {description = "google  Browser", group = "custom"}),
     -- slock锁屏
-    awful.key({ modkey, "Control" }, "l", function() awful.spawn.with_shell("slock") end,
+    awful.key({ modkey, "Control" }, "s", function() awful.spawn.with_shell("slock") end,
               {description = "slock锁屏", group = "custom"}),
     -- xscreensaver锁屏
     awful.key({ modkey, "Control" }, "x", function() awful.spawn.with_shell("xscreensaver-command -lock") end,

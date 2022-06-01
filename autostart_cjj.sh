@@ -134,7 +134,7 @@ if [ -z "$(pgrep  xautolock)" ] ; then
 fi
 
 
-
+#  Awesome自带托盘
 # # System tray
 # if [ -z "$(pgrep trayer)" ] ; then
 #     trayer --edge top --align center --widthtype percent --width 10 --heighttype pixel --height 22  --SetPartialStrut true --transparent true --alpha 60 --tint 0x777777 --expand true
