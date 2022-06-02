@@ -41,7 +41,11 @@ end
 --}}}
 
 -- {{{ Styles
-theme.font      = "sans 8"
+-- theme.font      = "sans 8"
+-- theme.font      = "WenQuanYi Micro Hei:style=Regular:pixelsize=8"
+theme.font      = "CaskaydiaCove Nerd Font Mono SemiLight 10"
+-- theme.font      = "CaskaydiaCove Nerd Font Mono Bold 10"
+-- theme.font      = "JetBrainsMono Nerd Font Mono Regular 10"
 
 -- {{{ Colors
 theme.fg_normal = "#eeeeff"
@@ -66,7 +70,10 @@ theme.border_width  = "1"
 --theme.border_normal = "#586c2d"
 --theme.border_normal = "#727352"
 --theme.border_normal = "#7273f2"
-theme.border_focus = "#2d41a3"
+-- theme.border_focus = "#2d41a3"
+-- theme.border_focus = "#00ff00"
+-- theme.border_focus = "#1E90FF"
+theme.border_focus = "#0000FF"
 theme.border_normal = "#7273a2"
 --theme.border_focus  = "#586c2d"
 theme.border_marked = "#CC9393"
