@@ -1009,6 +1009,10 @@ globalkeys = gears.table.join(
     awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 打开查看'") end,
               {description = "take a screenshot", group = "custom"}),
 
+    awful.key({ modkey, "Control" }, "t", function() awful.spawn.with_shell("bash ~/.config/awesome/script/touchpad.sh") end,
+              {description = "touchpad toggle", group = "custom"}),
+
+
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
               {description = "open file manager", group = "custom"}),
