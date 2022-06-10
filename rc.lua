@@ -693,28 +693,28 @@ globalkeys = gears.table.join(
     --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
     --          {description = "jump to urgent client", group = "client"}),
 
-    -- 切换至下一窗口 Mod4 + j    切换到其它窗口
+    -- 切换至下一窗口 Mod4 + j    切换到其它窗口,不跨越显示器
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    --  切换至上一窗口 Mod4 + k
+    --  切换至上一窗口 Mod4 + k,不跨越显示器
     awful.key({ modkey,           }, "k",
         function ()
             awful.client.focus.byidx(-1)
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    -- 切换至下一窗口 Mod4 + w    切换到其它窗口
+    -- 切换至下一窗口 Mod4 + w    切换到其它窗口,不跨越显示器
     awful.key({ modkey,           }, "w",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    --  切换至上一窗口 Mod4 + q
+    --  切换至上一窗口 Mod4 + q,不跨越显示器
     awful.key({ modkey,           }, "q",
         function ()
             awful.client.focus.byidx(-1)
