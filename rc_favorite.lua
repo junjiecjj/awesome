@@ -237,7 +237,7 @@ local menu_awesome     = { "awesome",        myawesomemenu,    beautiful.awesome
 local menu_terminal    = { "open terminal",  terminal,      }
 local gamemenu         = { "游戏",           gamesmenu,     }
 local appmenu          = { "APP",            appsmenu,      }
-local chatmenu         = { "视讯",           chatmenus,     }
+local chatmenu         = { "视讯",           chatsmenu,     }
 local editormenu       = { "编辑器",         editorsmenu,   }
 
 
@@ -303,7 +303,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- timezone
 -- 指明时区默认为本地时区
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock("%Y-%m-%d %a %H:%M:%S",1)
+mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
 
 
 --定义点击tag的行为
@@ -505,8 +505,6 @@ awful.screen.connect_for_each_screen(function(s)
                     timeout=5
                     }),
             spacer,
-            mysystray,
-            spacer,
             -- battery_widget(),
             net_speed_widget(),
             spacer,
@@ -543,6 +541,8 @@ awful.screen.connect_for_each_screen(function(s)
                     },
             spacer,
             logout_menu_widget(),
+            spacer,
+            mysystray,
             spacer,
             spacer,
             s.mylayoutbox,
@@ -693,28 +693,28 @@ globalkeys = gears.table.join(
     --awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
     --          {description = "jump to urgent client", group = "client"}),
 
-    -- 切换至下一窗口 Mod4 + j    切换到其它窗口
+    -- 切换至下一窗口 Mod4 + j    切换到其它窗口,不跨越显示器
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    --  切换至上一窗口 Mod4 + k
+    --  切换至上一窗口 Mod4 + k,不跨越显示器
     awful.key({ modkey,           }, "k",
         function ()
             awful.client.focus.byidx(-1)
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    -- 切换至下一窗口 Mod4 + w    切换到其它窗口
+    -- 切换至下一窗口 Mod4 + w    切换到其它窗口,不跨越显示器
     awful.key({ modkey,           }, "w",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    --  切换至上一窗口 Mod4 + q
+    --  切换至上一窗口 Mod4 + q,不跨越显示器
     awful.key({ modkey,           }, "q",
         function ()
             awful.client.focus.byidx(-1)
@@ -816,7 +816,7 @@ globalkeys = gears.table.join(
     --  ==================================================================================================
     --  ======================  切换显示器快捷键 ==============================
     --  ==================================================================================================
-
+    -- awesome桌面与显示器关系如下：每个显示器都可以打开所有的桌面，显示器之间的桌面完全独立，也就是如果有7个桌面，则显示器1和2都可以有7个桌面，且在显示器1中切换桌面不会影响显示器2,系统托盘只在primary显示.
 
     --  切换到下一个显示器屏幕  Mod4 + Control + j   切换不同的screen,聚焦下一个屏幕, 这会将您的光标从一个屏幕移动到另一个屏幕。它将焦点从一个屏幕上的客户端窗口更改为下一个屏幕上的客户端窗口。
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
@@ -1008,6 +1008,10 @@ globalkeys = gears.table.join(
 
     awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 打开查看'") end,
               {description = "take a screenshot", group = "custom"}),
+
+    awful.key({ modkey, "Control" }, "t", function() awful.spawn.with_shell("bash ~/.config/awesome/script/touchpad.sh") end,
+              {description = "touchpad toggle", group = "custom"}),
+
 
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
@@ -1344,7 +1348,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.

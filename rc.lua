@@ -237,7 +237,7 @@ local menu_awesome     = { "awesome",        myawesomemenu,    beautiful.awesome
 local menu_terminal    = { "open terminal",  terminal,      }
 local gamemenu         = { "游戏",           gamesmenu,     }
 local appmenu          = { "APP",            appsmenu,      }
-local chatmenu         = { "视讯",           chatmenus,     }
+local chatmenu         = { "视讯",           chatsmenu,     }
 local editormenu       = { "编辑器",         editorsmenu,   }
 
 
@@ -303,7 +303,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- timezone
 -- 指明时区默认为本地时区
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock("%Y-%m-%d %a %H:%M:%S",1)
+mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
 
 
 --定义点击tag的行为
@@ -505,8 +505,6 @@ awful.screen.connect_for_each_screen(function(s)
                     timeout=5
                     }),
             spacer,
-            mysystray,
-            spacer,
             -- battery_widget(),
             net_speed_widget(),
             spacer,
@@ -543,6 +541,8 @@ awful.screen.connect_for_each_screen(function(s)
                     },
             spacer,
             logout_menu_widget(),
+            spacer,
+            mysystray,
             spacer,
             spacer,
             s.mylayoutbox,
