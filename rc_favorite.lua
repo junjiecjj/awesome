@@ -495,6 +495,8 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             spacer,
+            net_speed_widget(),
+            spacer,
             ram_widget(),
             spacer,
             cpu_widget({
@@ -506,12 +508,9 @@ awful.screen.connect_for_each_screen(function(s)
                     }),
             spacer,
             -- battery_widget(),
-            net_speed_widget(),
-            spacer,
             volume_widget{
                        widget_type = 'arc'
                     },
-            spacer,
             spacer,
             batteryarc_widget({
                         show_current_level = true,
@@ -530,27 +529,23 @@ awful.screen.connect_for_each_screen(function(s)
             --     show_daily_forecast = true,
             -- }),
             spacer,
-            spacer,
-            mytextclock,
-            spacer,
-            spacer,
             brightness_widget{
                         type = 'icon_and_text',
                         program = 'xbacklight',
                         step = 2,
                     },
             spacer,
+            mytextclock,
+            spacer,
             logout_menu_widget(),
             spacer,
             mysystray,
-            spacer,
             spacer,
             s.mylayoutbox,
             spacer,
             layout = wibox.layout.fixed.horizontal
         }
     }
-
 
 
 end)
