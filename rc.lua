@@ -840,6 +840,14 @@ globalkeys = gears.table.join(
     --  减小窗口大小 Mod4 + -
     awful.key({ modkey,           }, "-",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
+
+    awful.key({ modkey,  "Shift"   }, "=",     function () awful.client.incwfact( 0.05)      end,
+             {description = "increase height", group = "layout"}),
+
+    awful.key({ modkey,  "Shift"   }, "-",     function () awful.client.incwfact(-0.05)      end,
+            {description = "decrease height", group = "layout"}
+        ),
+
     --  减少主窗口个数 Mod4 + Shift + h, 增加一个主视窗区
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
@@ -1202,7 +1210,18 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"}),
+
+    --  移动浮动窗口To move windows with mod+shift+←/↓/↑/→
+    awful.key({ modkey, "Shift"   }, "Down",   function (c) c:relative_move(  0,  20,   0,   0) end),
+    awful.key({ modkey, "Shift"   }, "Up",     function (c) c:relative_move(  0, -20,   0,   0) end),
+    awful.key({ modkey, "Shift"   }, "Left",   function (c) c:relative_move(-20,   0,   0,   0) end),
+    awful.key({ modkey, "Shift"   }, "Right",  function (c) c:relative_move( 20,   0,   0,   0) end),
+
+    --  改变浮动窗口大小
+    awful.key({ modkey, "Control"   }, "Up",   function (c) c:relative_move( 20,  20, -40, -40) end),
+    awful.key({ modkey,  "Control"  }, "Down",  function (c) c:relative_move(-20, -20,  40,  40) end)
+
 )
 
 -- Bind all key numbers to tags.
