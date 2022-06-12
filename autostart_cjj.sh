@@ -14,7 +14,10 @@
 
 # tray icons(eDP1 is the display device's name, use the command "xrandr" to see the display device name.)
 # 其中的eDP1便是我的显示设备名称。如果你的显示设备名称不是eDP1 ，那么需要修改
-exec --no-startup-id xrandr --output eDP-1 --primary
+xrandr --output eDP-1 --auto --primary
+xrandr --output DP-3  --right-of eDP-1  --auto
+
+
 
 # 如果为笔记本外接两个显示器，关闭笔记本的显示器
 # exec --no-startup-id xrandr --output DP-1-8 --mode 1920x1080 --primary
