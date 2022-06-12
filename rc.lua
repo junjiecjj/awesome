@@ -13,6 +13,20 @@ local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batterya
 local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
 -- local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
 local ram_widget = require("awesome-wm-widgets.ram-widget.ram-widget")
+local calendar_widget = require("awesome-wm-widgets.calendar-widget.calendar")
+local cmus_widget = require('awesome-wm-widgets.cmus-widget.cmus')
+-- local email_widget, email_icon = require("awesome-wm-widgets.email_widget.email")
+local fs_widget = require("awesome-wm-widgets.fs-widget.fs-widget")
+-- local gerrit_widget = require("awesome-wm-widgets.gerrit-widget.gerrit")
+-- local github_activity_widget = require("awesome-wm-widgets.github-activity-widget.github-activity-widget")
+local github_contributions_widget = require("awesome-wm-widgets.github-contributions-widget.github-contributions-widget")
+-- local github_prs_widget = require("awesome-wm-widgets.github-prs-widget")
+local mpdarc_widget = require("awesome-wm-widgets.mpdarc-widget.mpdarc")
+local mpris_widget = require("awesome-wm-widgets.mpris-widget")
+local run_shell = require("awesome-wm-widgets.run-shell-3.run-shell")
+local spotify_shell = require("awesome-wm-widgets.spotify-shell.spotify-shell")
+local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
+-- local gerrit_widget = require("awesome-wm-widgets.gerrit-widget.gerrit")
 
 
 --  状态栏插件
@@ -303,8 +317,25 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- timezone
 -- 指明时区默认为本地时区
 -- Create a textclock widget
+-- mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
+-- Create a textclock widget
 mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
-
+-- default
+local cw = calendar_widget()
+-- or customized
+local cw = calendar_widget({
+    theme = 'outrun',
+    placement = 'top_right',
+    start_sunday = true,
+    radius = 8,
+-- with customized next/previous (see table above)
+    previous_month_button = 1,
+    next_month_button = 3,
+})
+mytextclock:connect_signal("button::press",
+    function(_, _, _, button)
+        if button == 1 then cw.toggle() end
+    end)
 
 --定义点击tag的行为
 -- Create a wibox for each screen and add it
@@ -375,7 +406,11 @@ screen.connect_signal("property::geometry", set_wallpaper)
 --========================= 定制标签=======================================
 --==================================================================================================
 
-
+-- Separators
+spr = wibox.widget.textbox(' ')
+arrl = wibox.widget.imagebox(beautiful.arrl)
+arrl_dl = wibox.widget.imagebox(beautiful.arrl_dl)
+arrl_ld = wibox.widget.imagebox(beautiful.arrl_ld)
 
 
 --=======================================================================================================
@@ -508,10 +543,22 @@ awful.screen.connect_for_each_screen(function(s)
                     timeout=5
                     }),
             spacer,
-            -- battery_widget(),
+            fs_widget({ mounts = { '/', '/home' } }), -- multiple mounts
+            spacer,
+            mpdarc_widget,
+            spacer,
+            mpris_widget(),
+            spacer,
+            cmus_widget{
+                        space = 5,
+                        timeout = 5
+                    },
+            spacer,
             volume_widget{
                        widget_type = 'arc'
                     },
+            spacer,
+            battery_widget(),
             spacer,
             batteryarc_widget({
                         show_current_level = true,
@@ -536,9 +583,21 @@ awful.screen.connect_for_each_screen(function(s)
                         step = 2,
                     },
             spacer,
+            -- github_contributions_widget({username = 'junjiecjj'}),
+            spacer,
+            -- github_prs_widget {
+            --         reviewer = 'streetturtle'
+            --     },
+            spotify_widget({
+                       font = 'Ubuntu Mono 9',
+                       play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
+                       pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
+                    }),
+            spacer,
             mytextclock,
             spacer,
             logout_menu_widget(),
+            arrl_ld,
             spacer,
             mysystray,
             spacer,
@@ -1045,7 +1104,13 @@ globalkeys = gears.table.join(
     --           {description = "betterlockscreen锁屏", group = "custom"}),
     --  feh更换壁纸
     awful.key({ modkey, "Shift" }, "b", function() awful.spawn.with_shell("feh --recursive --randomize --bg-fill $(xdg-user-dir PICTURES)'/Wallpapers/'") end,
-              {description = "betterlockscreen锁屏", group = "custom"})
+              {description = "betterlockscreen锁屏", group = "custom"}),
+    awful.key({ modkey, "Shift"   }, "p", function() cmus_widget:play_pause() end,
+            {description = "play/pause cmus", group = "custom"}),
+
+    awful.key({modkey,"Shift"}, "r", function () run_shell.launch() end),
+    awful.key({ modkey, "Shift"  }, "d", function () spotify_shell.launch() end, {description = "spotify shell", group = "music"})
+
 
 )
 
