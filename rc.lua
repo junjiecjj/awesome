@@ -324,10 +324,11 @@ mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
 local cw = calendar_widget()
 -- or customized
 local cw = calendar_widget({
-    theme = 'outrun',
+    --  nord outrun  light dark naughty
+    theme = 'light',
     placement = 'top_right',
-    start_sunday = true,
-    radius = 8,
+    start_sunday = false,
+    radius = 12,
 -- with customized next/previous (see table above)
     previous_month_button = 1,
     next_month_button = 3,
