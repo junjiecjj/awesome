@@ -825,6 +825,13 @@ globalkeys = gears.table.join(
     --  切换到上一个显示器屏幕 Mod4 + [
     awful.key({ modkey,           }, "[", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
+    --  切换到下一个显示器屏幕  Mod4 + s
+    awful.key({ modkey,           }, "s", function () awful.screen.focus_relative( 1) end,
+              {description = "focus the next screen", group = "screen"}),
+    --  切换到上一个显示器屏幕 Mod4 + a
+    awful.key({ modkey,           }, "a", function () awful.screen.focus_relative(-1) end,
+              {description = "focus the previous screen", group = "screen"}),
+
     --  https://awesomewm.org/recipes/xrandr/
     --Pressing this key binding will open a popup with a possible screen arrangement. Pressing the key again will replace this popup with the next possibility, eventually arriving at "keep the current configuration".
     -- If the key is not pressed again within four seconds, the configuration described in the current popup is applied.
