@@ -324,8 +324,8 @@ mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
 local cw = calendar_widget()
 -- or customized
 local cw = calendar_widget({
-    --  nord outrun  light dark naughty
-    theme = 'light',
+    --  nord outrun  light dark naughty  monokai
+    theme = 'monokai',
     placement = 'top_right',
     start_sunday = false,
     radius = 12,
