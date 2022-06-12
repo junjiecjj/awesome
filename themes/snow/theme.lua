@@ -43,7 +43,7 @@ end
 -- {{{ Styles
 -- theme.font      = "sans 8"
 -- theme.font      = "WenQuanYi Micro Hei:style=Regular:pixelsize=8"
-theme.font      = "CaskaydiaCove Nerd Font Mono SemiLight 10"
+theme.font      = "CaskaydiaCove Nerd Font Mono SemiLight 11"
 -- theme.font      = "CaskaydiaCove Nerd Font Mono Bold 10"
 -- theme.font      = "JetBrainsMono Nerd Font Mono Regular 10"
 
