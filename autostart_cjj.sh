@@ -71,8 +71,10 @@ fi
 
 # 启用窗口透明
 if [ -z "$(pgrep picom)" ] ; then
-    picom --experimental-backends -b
+    # picom --experimental-backends -b
+    picom --experimental-backends -b  --config ~/.config/awesome/picom_NoblurRoundBrokenCorner.conf
 fi
+picom --experimental-backends -b  --config ~/.config/awesome/picom_NoblurRoundBrokenCorner.conf
 
 
 # 火焰截图
