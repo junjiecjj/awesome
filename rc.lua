@@ -545,7 +545,7 @@ awful.screen.connect_for_each_screen(function(s)
                     timeout=5
                     }),
             spacer,
-            fs_widget({ mounts = { '/', '/home' } }), -- multiple mounts
+            fs_widget({ mounts = { '/','/home'} }), -- multiple mounts
             spacer,
             mpdarc_widget,
             spacer,
