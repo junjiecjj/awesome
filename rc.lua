@@ -702,8 +702,8 @@ awful.spawn.with_shell("bash ~/.config/awesome/autostart_cjj.sh &")
 -- 全局鼠标操作是在root窗口进行鼠标操作时触发的操作，awesome不带任何参数调用对应的函数。
 root.buttons(gears.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 5, awful.tag.viewnext),
+    awful.button({ }, 4, awful.tag.viewprev)
 ))
 -- }}}
 
