@@ -319,9 +319,10 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- Create a textclock widget
 -- mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock("%Y-%m-%d %A %H:%M:%S",1)
+mytextclock = wibox.widget.textclock(" %Y-%m-%d %A %H:%M:%S",1)
+
 -- default
-local cw = calendar_widget()
+-- local cw = calendar_widget()
 -- or customized
 local cw = calendar_widget({
     --  nord outrun  light dark naughty  monokai
