@@ -68,7 +68,7 @@ local function worker(user_args)
         },
         {
             image = ICONS_DIR .. 'down.svg',
-            widget = wibox.widget.imagebox
+            widget = wibox.widget.imagebox,
         },
         {
             image =  ICONS_DIR .. 'up.svg',

@@ -41,7 +41,7 @@ local mpdarc = wibox.widget {
     forced_height = 32,
     forced_width = 32,
     rounded_edge = true,
-    bg = "#ffffff11",
+    bg = "#00ffff",
     paddings = 0,
     widget = wibox.container.arcchart
 }
@@ -101,7 +101,7 @@ local function show_MPD_status()
                 title = "MPD",
                 timeout = 5,
                 hover_timeout = 0.5,
-                width = 600,
+                width = 500,
             }
         end)
 end

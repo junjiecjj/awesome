@@ -32,10 +32,13 @@ local function worker(user_args)
     local notification_position = args.notification_position or 'top_right' -- see naughty.notify position argument
 
     local main_color = args.main_color or beautiful.fg_color
-    local bg_color = args.bg_color or '#ffffff11'
-    local low_level_color = args.low_level_color or '#e53935'
-    local medium_level_color = args.medium_level_color or '#c0ca33'
-    local charging_color = args.charging_color or '#43a047'
+    local bg_color = args.bg_color or '#ffffff'
+    -- local low_level_color = args.low_level_color or '#e53935'
+    local low_level_color = '#e53935'
+    -- local medium_level_color = args.medium_level_color or '#c0ca33'
+    local medium_level_color ='#c0ca33'
+    -- local charging_color = args.charging_color or '#43a047'
+    local charging_color = '#43a047'
 
     local warning_msg_title = args.warning_msg_title or 'Houston, we have a problem'
     local warning_msg_text = args.warning_msg_text or 'Battery is dying'

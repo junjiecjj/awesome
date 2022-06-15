@@ -46,7 +46,7 @@ local mpris_widget = wibox.widget{
         forced_height = 24,
         forced_width = 24,
         rounded_edge = true,
-        bg = "#ffffff11",
+        bg = "#00ffff",
         paddings = 0,
         widget = wibox.container.arcchart
     },
