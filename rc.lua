@@ -1022,6 +1022,8 @@ globalkeys = gears.table.join(
     -- awful.key({ }, "XF86AudioPlay",function () awful.util.spawn( "playerctl play-pause" ) end),
     -- awful.key({ }, "XF86AudioStop",function () awful.util.spawn( "playerctl pause" ) end),
 
+    awful.key({ modkey, altkey }, "k", function() awful.spawn.with_shell("xkill") end,
+              {description = "xkill", group = "custom"}),
 
     -- 音乐控制，MPD control
     awful.key({ altkey, "Control" }, "Up",
@@ -1141,6 +1143,7 @@ clientkeys = gears.table.join(
    --  关闭当前窗口  Mod4 + Shift + q
     awful.key({ modkey, "Shift"   }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
+
     --  切换当前窗口是否为浮动     Mod4 +  Space
     awful.key({ modkey,           }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
@@ -1440,7 +1443,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
