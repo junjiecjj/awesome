@@ -1443,7 +1443,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = false }
+      }, properties = { titlebars_enabled = true }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
