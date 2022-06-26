@@ -966,26 +966,26 @@ globalkeys = gears.table.join(
     --           {description = "toggle mute", group = "custom"}),
 
     awful.key({}, "XF86AudioRaiseVolume", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
-              {description = "volume up", group = "custom"}),
+              {description = "增大音量", group = "custom"}),
     awful.key({}, "XF86AudioLowerVolume", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
-              {description = "volume down", group = "custom"}),
+              {description = "减小音量", group = "custom"}),
     awful.key({}, "XF86AudioMute", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
-              {description = "toggle mute", group = "custom"}),
+              {description = "静音/解除静音", group = "custom"}),
 
 
     awful.key({modkey, "Shift" }, "=", function() os.execute("amixer set Master '5%+'") end,
-              {description = "volume up", group = "custom"}),
+              {description = "增大音量", group = "custom"}),
     awful.key({modkey, "Shift" }, "-", function() os.execute("amixer set Master '5%-'") end,
-              {description = "volume down", group = "custom"}),
+              {description = "减小音量", group = "custom"}),
     awful.key({modkey, "Shift" }, "BackSpace", function() os.execute("amixer -D pulse set Master 1+ toggle") end,
-              {description = "toggle mute", group = "custom"}),
+              {description = "静音/解除静音", group = "custom"}),
 
     awful.key({modkey, "Control" }, "=", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ +8%") end,
-              {description = "volume up", group = "custom"}),
+              {description = "增大音量", group = "custom"}),
     awful.key({modkey, "Control" }, "-", function() os.execute("pactl set-sink-volume @DEFAULT_SINK@ -8%") end,
-              {description = "volume down", group = "custom"}),
+              {description = "减小音量", group = "custom"}),
     awful.key({modkey, "Control" }, "BackSpace", function() os.execute("pactl set-sink-mute @DEFAULT_SINK@ toggle") end,
-              {description = "toggle mute", group = "custom"}),
+              {description = "静音/解除静音", group = "custom"}),
 
 
 
@@ -1071,28 +1071,28 @@ globalkeys = gears.table.join(
 
     -- 截图快捷键
     awful.key({"Shift"}, "Print", function() awful.spawn.with_shell("flameshot gui -p  $(xdg-user-dir PICTURES) -d 2000 ;exec notify-send '火焰截图 无延时 自己选择截图区域 保存在~/图片'") end,
-              {description = "take a screenshot", group = "custom"}),
+              {description = "火焰截图 无延时 自己选择截图区域 保存在~/图片", group = "custom"}),
 
     awful.key({"Control"}, "Print", function() awful.spawn.with_shell("flameshot full -c -p  $(xdg-user-dir PICTURES)  -d 2000 ;exec notify-send '火焰截图 捕获全屏（无GUI）并保存到剪贴板和路径~/图片 延迟2秒'") end,
-              {description = "take a screenshot", group = "custom"}),
+              {description = "火焰截图 捕获全屏（无GUI）并保存到剪贴板和路径~/图片 延迟2秒", group = "custom"}),
 
     awful.key({modkey,"Shift"}, "Print", function() awful.spawn.with_shell("deepin-screenshot;exec notify-send '深度截图' ") end,
-              {description = "take a screenshot", group = "custom"}),
+              {description = "深度截图", group = "custom"}),
 
 
     awful.key({}, "Print", function() awful.spawn.with_shell("scrot -cd 3 $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f; viewnior $f';exec notify-send 'Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看'") end,
-              {description = "take a screenshot", group = "custom"}),
+              {description = "Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看", group = "custom"}),
 
     awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 打开查看'") end,
-              {description = "take a screenshot", group = "custom"}),
+              {description = "Scrot截图 截取全屏，无GUI，保存指定路径 打开查看", group = "custom"}),
 
     awful.key({ modkey, "Control" }, "t", function() awful.spawn.with_shell("bash ~/.config/awesome/script/touchpad.sh") end,
-              {description = "touchpad toggle", group = "custom"}),
+              {description = "触控板关闭/打开", group = "custom"}),
 
 
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
-              {description = "open file manager", group = "custom"}),
+              {description = "Thunar文件管理器", group = "custom"}),
     -- dmenu程序启动器
     awful.key({ modkey }, "d", function() awful.spawn.with_shell("dmenu_run") end,
               {description = "dmenu程序启动器", group = "custom"}),
