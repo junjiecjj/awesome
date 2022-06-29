@@ -547,8 +547,8 @@ awful.screen.connect_for_each_screen(function(s)
             fs_widget({ mounts = { '/','/home'} }), -- multiple mounts
             spacer,
             mpdarc_widget,
-            spacer,
-            mpris_widget(),
+            -- spacer,
+            -- mpris_widget(),
             spacer,
             cmus_widget{
                         space = 5,
@@ -1443,7 +1443,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     --标题栏太碍眼了，取消掉。搜索 titlebars_enabled ，设置为 false 来取消标题栏。
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
