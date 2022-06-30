@@ -1080,11 +1080,11 @@ globalkeys = gears.table.join(
               {description = "深度截图", group = "custom"}),
 
 
-    awful.key({}, "Print", function() awful.spawn.with_shell("scrot -cd 3 $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f; viewnior $f';exec notify-send 'Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看'") end,
+    awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot -cd 3 $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f; viewnior $f';exec notify-send 'Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看'") end,
               {description = "Scrot截图 截取全屏 无GUI 保存指定路径 延迟3s 复制到剪切板 打开查看", group = "custom"}),
 
-    awful.key({modkey}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 打开查看'") end,
-              {description = "Scrot截图 截取全屏，无GUI，保存指定路径 打开查看", group = "custom"}),
+    awful.key({}, "Print", function() awful.spawn.with_shell("scrot $(xdg-user-dir PICTURES)/'Scrot_%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f; viewnior $f';exec notify-send 'Scrot截图 截取全屏，无GUI，保存指定路径 复制到剪切板 打开查看'") end,
+              {description = "Scrot截图 截取全屏，无GUI，保存指定路径 复制到剪切板 打开查看", group = "custom"}),
 
     awful.key({ modkey, "Control" }, "t", function() awful.spawn.with_shell("bash ~/.config/awesome/script/touchpad.sh") end,
               {description = "触控板关闭/打开", group = "custom"}),
