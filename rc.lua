@@ -731,7 +731,13 @@ globalkeys = gears.table.join(
     --   切换到下一个标签页(桌面，workspace)  Mod4 + '
     awful.key({ modkey,           }, "'",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
-
+    --   切换到上一个标签页(桌面，workspace) 切换标签  Mod4 + ;
+    awful.key({ modkey,           }, "a",   awful.tag.viewprev,
+              {description = "view previous", group = "tag"}),
+    --   切换到下一个标签页(桌面，workspace)  Mod4 + '
+    awful.key({ modkey,           }, "s",  awful.tag.viewnext,
+              {description = "view next", group = "tag"}),
+    
     -- Mod4 + Esc 快速切换到上一个聚焦的标签页(桌面)
     -- awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
     --           {description = "go back", group = "tag"}),
@@ -1093,6 +1099,11 @@ globalkeys = gears.table.join(
     -- 文件管理器
     awful.key({ modkey }, "t", function() awful.spawn.with_shell("thunar /home/jack/") end,
               {description = "Thunar文件管理器", group = "custom"}),
+    awful.key({ modkey }, "n", function() awful.spawn.with_shell("nautilus") end,
+              {description = "Nautilus文件管理器", group = "custom"}),
+    awful.key({ modkey }, "p", function() awful.spawn.with_shell("pcmanfm") end,
+              {description = "Pacman文件管理器", group = "custom"}),
+    
     -- dmenu程序启动器
     awful.key({ modkey }, "d", function() awful.spawn.with_shell("dmenu_run") end,
               {description = "dmenu程序启动器", group = "custom"}),
@@ -1190,13 +1201,13 @@ clientkeys = gears.table.join(
     awful.key({ modkey,   "Shift" }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
     --  窗口最小化  Mod4 + n
-    awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end ,
-        {description = "minimize", group = "client"}),
+    -- awful.key({ modkey,           }, "n",
+    --     function (c)
+    --         -- The client currently has the input focus, so it cannot be
+    --         -- minimized, since minimized clients can't have the focus.
+    --         c.minimized = true
+    --     end ,
+    --     {description = "minimize", group = "client"}),
     -- 窗口最大化,退出最大化  Mod4+m
     awful.key({ modkey,           }, "m",
         function (c)
